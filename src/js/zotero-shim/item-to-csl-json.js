@@ -24,7 +24,8 @@ export default zoteroItem => {
 	var itemTypeID = itemTypes[zoteroItem.itemType];
 
 	var cslItem = {
-		'id':zoteroItem.uri,
+		// 'id':zoteroItem.uri,
+		id: zoteroItem.itemKey,
 		'type':cslType
 	};
 

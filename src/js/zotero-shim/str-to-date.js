@@ -213,7 +213,7 @@ export default string => {
 					if(m.index > 0) {
 						part = parts[i].part.substr(0, m.index);
 						if(m[2]) {
-							part += ' ' + m[2];;
+							part += ' ' + m[2];
 						}
 					} else {
 						part = m[2];
