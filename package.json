@@ -2,13 +2,15 @@
   "name": "zotero-bib",
   "license": "AGPL-3.0",
   "version": "0.0.1",
+  "private": true,
   "description": "",
   "repository": "",
   "main": "lib/main.js",
   "files": [ "lib", "build"],
   "config": {
     "test_browsers": "Chrome",
-    "port": "9090",
+    "port": "8001",
+    "interface": "127.0.0.1",
     "translation_server": "http://localhost:1969"
   },
   "scripts": {
@@ -17,7 +19,7 @@
     "build:prepublish": "run-p build:production build:lib",
     "build:lib": "cd src/js && babel *.js **/*.js -d ../../lib",
     "build:production": "browserify -s ZoteroBib -d src/js/main.js -t [babelify] -t [uglifyify] -o build/bib.js",
-    "serve": "http-server -a 127.0.0.1 -p $npm_package_config_port -P $npm_package_config_translation_server build/",
+    "serve": "http-server -a $npm_package_config_interface -p $npm_package_config_port -P $npm_package_config_translation_server build/",
     "live-reload": "live-reload --port 9091 build/",
     "prebuild": "npm run clean -s",
     "clean": "rimraf build/* lib/*",
@@ -30,7 +32,6 @@
     "watch:scss": "node-sass src/scss/main.scss --watch --recursive --source-map true --output build/bib.css",
     "watch:html": "nodemon -q -w src/html --ext '.' --exec 'npm run build:html'",
     "watch:test": "NODE_ENV=test karma start --browsers $npm_package_config_test_browsers",
-    "open:dev": "opener http://localhost:9090",
     "test": "NODE_ENV=test karma start --single-run --browsers $npm_package_config_test_browsers",
     "start": "run-p \"build\" \"live-reload -s {@}\" \"serve -s {@}\" \"watch -s {@}\""
   },
@@ -66,9 +67,7 @@
     "node-sass": "^4.5.0",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.1",
-    "opener": "^1.4.2",
     "rimraf": "^2.5.4",
-    "sinon": "^1.17.7",
     "uglifyify": "^3.0.4",
     "watchify": "^3.9.0"
   }
