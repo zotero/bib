@@ -1,6 +1,6 @@
 /*eslint-env node */
 module.exports = function(karma) {
-	var reporters = process.env.TRAVIS ? ['dots', 'coverage', 'coveralls'] : ['mocha'];
+	var reporters = process.env.TRAVIS ? ['dots', 'coverage', 'coveralls'] : ['mocha', 'coverage'];
 
 	karma.set({
 		frameworks: [ 'browserify', 'jasmine'],

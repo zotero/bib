@@ -6,7 +6,7 @@
   "repository": "",
   "main": "",
   "config": {
-    "test_browsers": "PhantomJS",
+    "test_browsers": "Chrome",
     "port": "9090",
     "translation_server": "http://localhost:1969"
   },
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "babel-regenerator-runtime": "^6.5.0",
+    "citeproc-js": "github:tnajdek/citeproc-js",
     "es6-promise": "^4.0.5",
     "isomorphic-fetch": "^2.2.1"
   },

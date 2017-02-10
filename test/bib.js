@@ -7,8 +7,4 @@ describe('Zotero Bib', function() {
 	it('pass', function() {
 		expect(1).toBe(1);
 	});
-
-	it('fail', function() {
-		expect(1).toBe(2);
-	});
 });
