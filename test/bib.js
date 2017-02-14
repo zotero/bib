@@ -87,7 +87,7 @@ describe('Zotero Bib', () => {
 		expect(bib.items[0]).toEqual(cslItemBook);
 	});
 
-	it('should allow removing items', () => {
+	it('should remove items', () => {
 		let bib = new ZoteroBib({
 			persistInLocalStorage: false,
 			initialItems: [zoteroItemBook]
@@ -96,6 +96,16 @@ describe('Zotero Bib', () => {
 		bib.removeItem({}); //make sure it removes the right item
 		expect(bib.items.length).toBe(1);
 		bib.removeItem(bib.rawItems[0]);
+		expect(bib.items.length).toBe(0);
+	});
+
+	it('should clear items', () => {
+		let bib = new ZoteroBib({
+			persistInLocalStorage: false,
+			initialItems: [zoteroItemBook, zoteroItemPaper]
+		});
+		expect(bib.items.length).toBe(2);
+		bib.clearItems();
 		expect(bib.items.length).toBe(0);
 	});
 
@@ -146,6 +156,18 @@ describe('Zotero Bib', () => {
 
 		expect(JSON.parse(fakeStore.items).length).toBe(1);
 		bib.removeItem(bib.rawItems[0]);
+		expect(JSON.parse(fakeStore.items).length).toBe(0);
+	});
+
+	it('should persist clear items from localStorage', () => {
+		expect('items' in fakeStore).toBe(false);
+
+		let bib = new ZoteroBib({
+			persistInLocalStorage: true,
+			initialItems: [zoteroItemBook, zoteroItemPaper]
+		});
+		expect(JSON.parse(fakeStore.items).length).toBe(2);
+		bib.clearItems();
 		expect(JSON.parse(fakeStore.items).length).toBe(0);
 	});
 

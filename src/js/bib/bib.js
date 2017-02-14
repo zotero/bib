@@ -52,6 +52,13 @@ export default class ZoteroBib {
 		}
 	}
 
+	clearItems() {
+		this._items = [];
+		if(this.opts.persistInLocalStorage) {
+			this.setItemsLocalStorage(this._items);
+		}
+	}
+
 	get items() {
 		return this._items.map(i => itemToCSLJSON(i))
 	}

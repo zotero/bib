@@ -1,5 +1,5 @@
 export default {
-	translationServerUrl: 'http://localhost:9090',
+	translationServerUrl: typeof window != 'undefined' && window.location.origin || '',
 	init: {},
 	request: {},
 	persistInLocalStorage: true
