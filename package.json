@@ -14,14 +14,14 @@
     "translation_server": "http://localhost:1969"
   },
   "scripts": {
-    "prepublish": "run-s clean build:prepublish",
+    "prepublish": "mkdir -p build/ && mkdir -p lib/ && run-s clean build:prepublish",
     "postpublish": "run-s clean",
     "build:prepublish": "run-p build:production build:lib",
     "build:lib": "cd src/js && babel *.js **/*.js -d ../../lib",
     "build:production": "browserify -s ZoteroBib -d src/js/main.js -t [babelify] -t [uglifyify] -o build/bib.js",
     "serve": "http-server -a $npm_package_config_interface -p $npm_package_config_port -P $npm_package_config_translation_server build/",
     "live-reload": "live-reload --port 9091 build/",
-    "prebuild": "npm run clean -s",
+    "prebuild": "mkdir -p build/ && npm run clean -s",
     "clean": "rimraf build/* lib/*",
     "build": "npm run build:js -s && npm run build:scss -s && npm run build:html -s",
     "build:js": "browserify -s ZoteroBib -d src/js/main.js -t [babelify] -o build/bib.js",
