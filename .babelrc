@@ -1,0 +1,17 @@
+{
+  "plugins": [
+    "transform-async-to-generator"
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        "istanbul"
+      ]
+    },
+    "production": {
+      "presets": [
+        "babili"
+      ]
+    }
+  }
+}
