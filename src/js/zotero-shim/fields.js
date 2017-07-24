@@ -109,4 +109,5 @@ const fields = {
 
 //reverse lookup
 Object.keys(fields).map(k => fields[fields[k]] = k);
-export default fields;
+
+module.exports = fields;

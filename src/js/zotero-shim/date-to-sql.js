@@ -1,6 +1,6 @@
-import lpad from './lpad';
+const lpad = require('./lpad');
 
-export default (date, toUTC) => {
+module.exports = (date, toUTC) => {
 	var year, month, day, hours, minutes, seconds;
 	try {
 		if(toUTC) {

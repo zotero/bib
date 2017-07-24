@@ -1,12 +1,11 @@
 'use strict';
 
-import utils from './utils';
-import defaults from './defaults';
+const utils = require('./utils');
+const defaults = require('./defaults');
+const { CSL } = require('citeproc-js');
+const itemToCSLJSON = require('../zotero-shim/item-to-csl-json');
 
-import { CSL } from 'citeproc-js';
-import itemToCSLJSON from '../zotero-shim/item-to-csl-json';
-
-export default class ZoteroBib {
+class ZoteroBib {
 	constructor(opts) {
 		this.opts = Object.assign({
 			sessionid: utils.uuid4()
@@ -94,3 +93,4 @@ export default class ZoteroBib {
 	}
 }
 
+module.exports = ZoteroBib;

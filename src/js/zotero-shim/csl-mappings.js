@@ -1,4 +1,4 @@
-export default {
+module.exports = {
 	CSL_NAMES_MAPPINGS: {
 		'author':'author',
 		'editor':'editor',

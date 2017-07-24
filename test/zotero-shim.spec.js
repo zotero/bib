@@ -1,12 +1,12 @@
 /* eslint-env node, karma,jasmine */
 'use strict';
 
-let strToDate = require('../src/js/zotero-shim/str-to-date');
-let itemToCSLJSON = require('../src/js/zotero-shim/item-to-csl-json');
-let zoteroItemBook = require('./fixtures/zotero-item-book');
-let zoteroItemPaper = require('./fixtures/zotero-item-paper');
-let cslItemBook = require('./fixtures/csl-item-book');
-let cslItemPaper = require('./fixtures/csl-item-paper');
+const strToDate = require('../src/js/zotero-shim/str-to-date');
+const itemToCSLJSON = require('../src/js/zotero-shim/item-to-csl-json');
+const zoteroItemBook = require('./fixtures/zotero-item-book');
+const zoteroItemPaper = require('./fixtures/zotero-item-paper');
+const cslItemBook = require('./fixtures/csl-item-book');
+const cslItemPaper = require('./fixtures/csl-item-paper');
 
 describe('Zotero Shim', () => {
 	it('should convert date to CSL format', () => {

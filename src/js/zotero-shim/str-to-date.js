@@ -1,6 +1,6 @@
 'use strict';
 
-import dateToSQL from './date-to-sql';
+const dateToSQL = require('./date-to-sql');
 
 const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 
@@ -36,7 +36,7 @@ const _insertDateOrderPart = (dateOrder, part, partOrder) => {
 		return dateOrder + part;
 }
 
-export default string => {
+module.exports = string => {
 	var date = {
 		order: ''
 	};

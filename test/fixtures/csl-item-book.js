@@ -1,6 +1,6 @@
 'use strict';
 
-export default jasmine.objectContaining({
+module.exports = jasmine.objectContaining({
 	type: 'book',
 	title: 'Dune',
 	publisher: 'Hodder Paperbacks',

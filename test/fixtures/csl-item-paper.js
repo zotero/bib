@@ -1,6 +1,6 @@
 'use strict';
 
-export default jasmine.objectContaining({
+module.exports = jasmine.objectContaining({
 	type: 'article-journal',
 	title: 'Scalable-manufactured randomized glass-polymer hybrid metamaterial for daytime radiative cooling',
 	'container-title': 'Science',

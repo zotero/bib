@@ -1,5 +1,5 @@
-import fields from './fields';
-import itemTypes from './item-types';
+const fields = require('./fields');
+const itemTypes = require('./item-types');
 
 const typeSpecificFieldMap = {
 	[(16 << 8) + 4]: 94,
@@ -58,7 +58,7 @@ const typeSpecificFieldMap = {
 	[(21 << 8) + 110]: 113
 };
 
-export default {
+module.exports = {
 	map: typeSpecificFieldMap,
 	getFieldIDFromTypeAndBase: (typeId, fieldId) => {
 		typeId = typeof typeId === 'number' ? typeId : itemTypes[typeId];

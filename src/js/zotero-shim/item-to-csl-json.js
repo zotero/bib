@@ -1,21 +1,20 @@
 'use strict';
 
-import {
+const {
 	CSL_NAMES_MAPPINGS,
 	CSL_TEXT_MAPPINGS,
 	CSL_DATE_MAPPINGS,
 	CSL_TYPE_MAPPINGS
-} from './csl-mappings';
+} = require('./csl-mappings');
 
-import { CSL } from 'citeproc-js';
-import { getFieldIDFromTypeAndBase } from './type-specific-field-map';
+const { CSL } = require('citeproc-js');
+const { getFieldIDFromTypeAndBase } = require('./type-specific-field-map');
+const fields = require('./fields');
+const itemTypes = require('./item-types');
+const strToDate = require('./str-to-date');
+const defaultItemTypeCreatorTypeLookup = require('./default-item-type-creator-type-lookup');
 
-import fields from './fields';
-import itemTypes from './item-types';
-import strToDate from './str-to-date';
-import defaultItemTypeCreatorTypeLookup from './default-item-type-creator-type-lookup';
-
-export default zoteroItem => {
+module.exports = zoteroItem => {
 	var cslType = CSL_TYPE_MAPPINGS[zoteroItem.itemType];
 	if (!cslType) {
 		throw new Error('Unexpected Zotero Item type "' + zoteroItem.itemType + '"');

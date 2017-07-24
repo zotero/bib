@@ -1,9 +1,8 @@
 'use strict';
 
-import 'es6-promise/auto';
-import 'isomorphic-fetch';
-import 'babel-regenerator-runtime';
+require('es6-promise/auto');
+require('isomorphic-fetch');
+require('babel-regenerator-runtime');
+const ZoteroBib = require('./bib/bib');
 
-import ZoteroBib from './bib/bib';
-
-export default ZoteroBib;
+module.exports = ZoteroBib;

@@ -35,4 +35,4 @@ const creatorTypes = {
 
 //reverse lookup
 Object.keys(creatorTypes).map(k => creatorTypes[creatorTypes[k]] = k);
-export default creatorTypes;
+module.exports = creatorTypes;

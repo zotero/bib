@@ -41,4 +41,4 @@ const itemTypes = {
 
 //reverse lookup
 Object.keys(itemTypes).map(k => itemTypes[itemTypes[k]] = k);
-export default itemTypes;
+module.exports = itemTypes;

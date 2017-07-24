@@ -1,4 +1,4 @@
-export default {
+module.exports = {
 	'itemKey': 'PXZ5ISSF',
 	'itemVersion': 0,
 	'itemType': 'book',

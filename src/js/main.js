@@ -1,6 +1,6 @@
 'use strict';
 
-import 'babel-regenerator-runtime';
-import ZoteroBib from './bib/bib';
+require('babel-regenerator-runtime');
+const ZoteroBib = require('./bib/bib');
 
-export default ZoteroBib;
+module.exports = ZoteroBib;
