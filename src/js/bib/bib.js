@@ -9,17 +9,23 @@ class ZoteroBib {
 	constructor(opts) {
 		this.opts = Object.assign({
 			sessionid: utils.uuid4()
-		}, defaults, opts);
+		}, defaults(), opts);
 
-		this._items = this.opts.initialItems || [];
-		if(this.opts.persistInLocalStorage) {
-			this._items = this._items.concat(this.getItemsLocalStorage());
-			this.setItemsLocalStorage(this._items);
+		this.items = [...this.opts.initialItems];
+		if(this.opts.persist && this.opts.storage) {
+			if(!('getItem' in this.opts.storage ||
+				'setItem' in this.opts.storage ||
+				'clear' in this.opts.storage
+			)) {
+				throw new Error('Invalid storage engine provided');
+			}
+			this.items = [...this.items, ...this.getItemsStorage()];
+			this.setItemsStorage(this.items);
 		}
 	}
 
-	getItemsLocalStorage() {
-		let items = localStorage.getItem('items');
+	getItemsStorage() {
+		let items = this.opts.storage.getItem('items');
 		if(items) {
 			return JSON.parse(items);
 		} else {
@@ -27,23 +33,23 @@ class ZoteroBib {
 		}
 	}
 
-	setItemsLocalStorage(items) {
-		localStorage.setItem('items', JSON.stringify(items));
+	setItemsStorage(items) {
+		this.opts.storage.setItem('items', JSON.stringify(items));
 	}
 
 	addItem(item) {
-		this._items.push(item);
-		if(this.opts.persistInLocalStorage) {
-			this.setItemsLocalStorage(this._items);
+		this.items.push(item);
+		if(this.opts.persist) {
+			this.setItemsStorage(this.items);
 		}
 	}
 
 	removeItem(item) {
-		let index = this._items.indexOf(item);
+		let index = this.items.indexOf(item);
 		if(index !== -1) {
-			this._items.splice(index, 1);
-			if(this.opts.persistInLocalStorage) {
-				this.setItemsLocalStorage(this._items);
+			this.items.splice(index, 1);
+			if(this.opts.persist) {
+				this.setItemsStorage(this.items);
 			}
 			return true;
 		} else {
@@ -52,18 +58,18 @@ class ZoteroBib {
 	}
 
 	clearItems() {
-		this._items = [];
-		if(this.opts.persistInLocalStorage) {
-			this.setItemsLocalStorage(this._items);
+		this.items = [];
+		if(this.opts.persist) {
+			this.setItemsStorage(this.items);
 		}
 	}
 
-	get items() {
-		return this._items.map(i => itemToCSLJSON(i))
+	get itemsCSL() {
+		return this.items.map(i => itemToCSLJSON(i))
 	}
 
-	get rawItems() {
-		return this._items;
+	get itemsRaw() {
+		return this.items;
 	}
 
 	async translateUrl(url, add = true) {
@@ -86,10 +92,6 @@ class ZoteroBib {
 		}
 
 		return Array.isArray(items) && items || false;
-	}
-
-	static get CSL() {
-		return CSL;
 	}
 }
 

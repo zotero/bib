@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = jasmine.objectContaining({
+module.exports = {
 	type: 'article-journal',
 	title: 'Scalable-manufactured randomized glass-polymer hybrid metamaterial for daytime radiative cooling',
 	'container-title': 'Science',
@@ -12,4 +12,4 @@ module.exports = jasmine.objectContaining({
 	ISSN: '0036-8075, 1095-9203',
 	language: 'en',
 	author: [ { family: 'Zhai', given: 'Yao' }, { family: 'Ma', given: 'Yaoguang' }, { family: 'David', given: 'Sabrina N.' }, { family: 'Zhao', given: 'Dongliang' }, { family: 'Lou', given: 'Runnan' }, { family: 'Tan', given: 'Gang' }, { family: 'Yang', given: 'Ronggui' }, { family: 'Yin', given: 'Xiaobo' } ], issued: { 'date-parts': [ [ '2017', 2, 9 ] ] }
-});
+};

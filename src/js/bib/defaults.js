@@ -1,6 +1,10 @@
-module.exports = {
+'use strict';
+
+module.exports = () => ({
 	translationServerUrl: typeof window != 'undefined' && window.location.origin || '',
-	init: {},
+	fetchConfig: {},
+	initialItems: [],
 	request: {},
-	persistInLocalStorage: true
-};
+	storage: typeof window != 'undefined' && 'localStorage' in window && window.localStorage || {},
+	persist: true
+});

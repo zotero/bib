@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = jasmine.objectContaining({
+module.exports = {
 	type: 'book',
 	title: 'Dune',
 	publisher: 'Hodder Paperbacks',
@@ -12,4 +12,4 @@ module.exports = jasmine.objectContaining({
 	issued: {
 		'date-parts': [ [ '1982', 2, 1 ]]
 	}
-});
+};

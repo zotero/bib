@@ -1,16 +1,17 @@
 {
-  "plugins": [
-    "transform-async-to-generator"
-  ],
   "env": {
-    "test": {
-      "plugins": [
-        "istanbul"
-      ]
-    },
-    "production": {
+    "browser": {
       "presets": [
         "babili"
+      ]
+    },
+    "browser-compat": {
+      "presets": [
+        "es2015",
+        "babili"
+      ],
+      "plugins": [
+        "transform-async-to-generator"
       ]
     }
   }
