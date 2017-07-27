@@ -172,33 +172,25 @@ describe('Zotero Bib', () => {
 		assert.equal(JSON.parse(fakeStore.storage.items).length, 0);
 	});
 
-	it('should translate an url using translation server', (done) => {
+	it('should translate an url using translation server', async () => {
 		let bib = new ZoteroBib({
 			persist: false
 		});
 
-		bib.translateUrl('http://example.com/paper').then(zoteroItems => {
+		const [zoteroItem] = await bib.translateUrl('http://example.com/paper');
 			assert(fetchRequests.length, 1);
-			assert(zoteroItems.length, 1);
-			assert(zoteroItems[0], zoteroItemPaper);
-			done();
-		});
+			assert(zoteroItem, zoteroItemPaper);
 	});
 
-	it('should should add a translated item', (done) => {
+	it('should should add a translated item', async () => {
 		let bib = new ZoteroBib({
 			persist: false
 		});
 
 		assert.equal(bib.items.length, 0);
-		bib.translateUrl('http://example.com/paper').then(() => {
-			assert(bib.items.length, 1);
-			assert(bib.items[0], cslItemPaper);
-			done();
-		}).catch(() => {
-			fail();
-			done();
-		})
+		await bib.translateUrl('http://example.com/paper');
+		assert(bib.items.length, 1);
+		assert(bib.items[0], cslItemPaper);
 	});
 
 	it('should shouldn\'t add an untranslatable item', async () => {
@@ -209,7 +201,9 @@ describe('Zotero Bib', () => {
 		assert.equal(bib.itemsCSL.length, 0);
 		try {
 			await bib.translateUrl('http://example.com/');
-		} catch(_) {}
+		} catch(_) {
+			// ignore
+		}
 		assert.equal(bib.itemsCSL.length, 0);
 	});
 });

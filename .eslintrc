@@ -2,11 +2,10 @@
   "globals": {
     "require": false
   },
-  "ecmaFeatures": {},
+  "parser": "babel-eslint",
   "env": {
     "node": true,
     "browser": true,
-    "jasmine": true,
     "es6": true
   },
   "parserOptions": {
