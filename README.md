@@ -2,7 +2,9 @@
 
 Overview
 --------
-Zotero Bib is a library that can process URLs into CSL bibliography items. It uses a translation server to translate URL into a Zotero Item which then is translated into a CSL item that then can be proessed by citeproc-js so that finally a bibliography item can be rendered. While this library is expected to be used in the browser, there is nothing preventing it from working within node environment.
+Zotero Bib is a library that can process URLs into CSL bibliography items. It uses a translation server to translate URLs into a Zotero Items, optionally persisting these items in any (Web Storage)[https://developer.mozilla.org/en/docs/Web/API/Storage] compatible container 
+
+ which it can optionally store in  which then is translated into a CSL item that then can be proessed by citeproc-js so that finally a bibliography item can be rendered. 
 
 Prerequisites
 ------------
