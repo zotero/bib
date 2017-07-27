@@ -1,0 +1,18 @@
+{
+  "env": {
+    "browser": {
+      "presets": [
+        "babili"
+      ]
+    },
+    "browser-compat": {
+      "presets": [
+        "es2015",
+        "babili"
+      ],
+      "plugins": [
+        "transform-async-to-generator"
+      ]
+    }
+  }
+}
