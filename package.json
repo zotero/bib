@@ -17,8 +17,8 @@
     "translation_server": "http://localhost:1969"
   },
   "scripts": {
-    "prepack": "npm run build",
-    "postpack": "rimraf lib",
+    "prepublishOnly": "npm run build",
+    "postpublish": "rimraf lib",
     "build": "mkdir -p build/ && mkdir -p lib/ && run-s clean build:browser build:browser-compat build:node",
     "build:browser": "NODE_ENV=browser browserify -s ZoteroBib -d src/js/main.js -t [babelify] -o build/bib.js",
     "build:browser-compat": "NODE_ENV=browser-compat browserify -s ZoteroBib -d src/js/main-compat.js -t [babelify] -o build/bib-compat.js",
