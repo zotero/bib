@@ -88,11 +88,26 @@ describe('Zotero Bib', () => {
 			persist: false,
 			initialItems: [zoteroItemBook]
 		});
+
 		assert.equal(bib.itemsCSL.length, 1);
 		bib.removeItem({}); //make sure it removes the right item
 		assert.equal(bib.itemsCSL.length, 1);
 		bib.removeItem(bib.itemsRaw[0]);
 		assert.equal(bib.itemsCSL.length, 0);
+	});
+
+	it('should update an item', () => {
+		let bib = new ZoteroBib({
+			persist: false,
+			initialItems: [zoteroItemBook]
+		});
+
+		assert.equal(bib.items[0].title, 'Dune');
+		bib.updateItem(0, {
+			...bib.items[0],
+			title: 'FooBar'
+		});
+		assert.equal(bib.items[0].title, 'FooBar');
 	});
 
 	it('should clear items', () => {
@@ -159,7 +174,22 @@ describe('Zotero Bib', () => {
 		assert.equal(JSON.parse(fakeStore.storage.items).length, 0);
 	});
 
-	it('should persist clear items from localStorage', () => {
+	it('should persist item changes in localStorage ', () => {
+		let bib = new ZoteroBib({
+			storage: fakeStore,
+			persist: true,
+			initialItems: [zoteroItemBook]
+		});
+
+		assert.equal(JSON.parse(fakeStore.storage.items)[0].title, 'Dune');
+		bib.updateItem(0, {
+			...bib.items[0],
+			title: 'FooBar'
+		});
+		assert.equal(JSON.parse(fakeStore.storage.items)[0].title, 'FooBar');
+	});
+
+	it('should clear items from localStorage', () => {
 		assert.equal('items' in fakeStore.storage, false);
 
 		let bib = new ZoteroBib({

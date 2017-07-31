@@ -2,7 +2,6 @@
 
 const utils = require('./utils');
 const defaults = require('./defaults');
-const { CSL } = require('citeproc-js');
 const itemToCSLJSON = require('../zotero-shim/item-to-csl-json');
 
 class ZoteroBib {
@@ -39,6 +38,13 @@ class ZoteroBib {
 
 	addItem(item) {
 		this.items.push(item);
+		if(this.opts.persist) {
+			this.setItemsStorage(this.items);
+		}
+	}
+
+	updateItem(index, item) {
+		this.items[index] = item;
 		if(this.opts.persist) {
 			this.setItemsStorage(this.items);
 		}

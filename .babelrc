@@ -14,5 +14,8 @@
         "transform-async-to-generator"
       ]
     }
-  }
+  },
+  "plugins": [
+    "transform-object-rest-spread"
+  ]
 }
