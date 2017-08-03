@@ -1,4 +1,4 @@
-/* eslint-env node */
+/* eslint-env node, mocha */
 'use strict';
 
 const assert = require('chai').assert;
@@ -28,5 +28,26 @@ describe('Zotero Shim', () => {
 	it('should convert Zotero Item format to CSL format', () => {
 		assert.deepInclude(itemToCSLJSON(zoteroItemBook), cslItemBook);
 		assert.deepInclude(itemToCSLJSON(zoteroItemPaper), cslItemPaper);
+	});
+
+
+
+	it('should convert ZoteroItem with partially empty creators field to CSL format', () => {
+		assert.deepInclude(
+			itemToCSLJSON({
+				'itemKey': 'ABCDABCD',
+				'itemVersion': 0,
+				'itemType': 'book',
+				'creators': [{
+					'firstName': '',
+					'lastName': '',
+					'creatorType': 'author'
+				}],
+				'title': 'Lorem Ipsum'
+		}), {
+			type: 'book',
+			title: 'Lorem Ipsum',
+			author: [ { family: '', given: '' } ]
+		});
 	});
 });

@@ -1,4 +1,4 @@
-/* eslint-env node, karma,jasmine */
+/* eslint-env node, mocha */
 'use strict';
 
 const assert = require('chai').assert;

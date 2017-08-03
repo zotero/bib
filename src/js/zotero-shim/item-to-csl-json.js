@@ -91,7 +91,7 @@ module.exports = zoteroItem => {
 				continue;
 			}
 
-			if (creator.lastName || creator.firstName) {
+			if ('lastName' in creator || 'firstName' in creator) {
 				nameObj = {
 					family: creator.lastName || '',
 					given: creator.firstName || ''
@@ -111,7 +111,7 @@ module.exports = zoteroItem => {
 						CSL.parseParticles(nameObj, true);
 					}
 				}
-			} else if (creator.name) {
+			} else if ('name' in creator) {
 				nameObj = {'literal': creator.name};
 			}
 
