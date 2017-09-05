@@ -47,5 +47,5 @@ npm run build
 git add -A
 git commit -m "Release $version"
 git tag "v$version-release"
-git push --tags origin release
+git push origin --tags
 git checkout $branch
