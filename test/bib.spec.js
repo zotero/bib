@@ -3,6 +3,7 @@
 
 const assert = require('chai').assert;
 const fetchMock = require('fetch-mock');
+const sinon = require('sinon');
 
 const ZoteroBib = require('../src/js/main.js');
 const zoteroItemBook = require('./fixtures/zotero-item-book');
@@ -44,6 +45,11 @@ describe('Zotero Bib', () => {
 						headers: headersOK
 					}
 				} else if(JSON.parse(opts.body).url.includes('paper')) {
+					return {
+						body: [zoteroItemPaper],
+						headers: headersOK
+					}
+				} else if(JSON.parse(opts.body).url.includes('newspaperArticle')) {
 					return {
 						body: [zoteroItemPaper],
 						headers: headersOK
@@ -235,5 +241,15 @@ describe('Zotero Bib', () => {
 			// ignore
 		}
 		assert.equal(bib.itemsCSL.length, 0);
+	});
+
+	it('should replace CURRENT_TIMESTAMP with actual timestamp on translation', async () => {
+		let bib = new ZoteroBib({
+			persist: false
+		});
+		let clock = sinon.useFakeTimers(new Date(Date.UTC(2017,4,10,11,12,13)));
+		await bib.translateUrl('http://example.com/newspaperArticle');
+		assert.equal(bib.itemsRaw[0].accessDate, '2017-05-10 11:12:13');
+		clock.restore();
 	});
 });

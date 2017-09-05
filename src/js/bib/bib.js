@@ -3,6 +3,7 @@
 const utils = require('./utils');
 const defaults = require('./defaults');
 const itemToCSLJSON = require('../zotero-shim/item-to-csl-json');
+const dateToSql = require('../zotero-shim/date-to-sql');
 
 class ZoteroBib {
 	constructor(opts) {
@@ -93,8 +94,17 @@ class ZoteroBib {
 
 		let response = await fetch(translationServerUrl, init);
 		let items = await response.json();
-		if(Array.isArray(items) && add) {
-			items.forEach(this.addItem.bind(this));
+		if(Array.isArray(items)) {
+			items.forEach(item => {
+				if(item.accessDate === 'CURRENT_TIMESTAMP') {
+					const dt = new Date(Date.now());
+					item.accessDate = dateToSql(dt, true);
+				}
+
+				if(add) {
+					this.addItem(item);
+				}
+			});
 		}
 
 		return Array.isArray(items) && items || false;
