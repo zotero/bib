@@ -252,4 +252,16 @@ describe('Zotero Bib', () => {
 		assert.equal(bib.itemsRaw[0].accessDate, '2017-05-10 11:12:13');
 		clock.restore();
 	});
+
+	it('should accept translationServerUrl and translationServerPrefix', async () => {
+		fetchMock.mock('https://example.com/lorem/ipsum/web', zoteroItemBook);
+
+		let bib = new ZoteroBib({
+			persist: false,
+			translationServerUrl: 'https://example.com',
+			translationServerPrefix: 'lorem/ipsum/'
+		});
+
+		await bib.translateUrl('http://example.com/newspaperArticle');
+	});
 });

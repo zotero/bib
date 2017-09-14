@@ -2,6 +2,7 @@
 
 module.exports = () => ({
 	translationServerUrl: typeof window != 'undefined' && window.location.origin || '',
+	translationServerPrefix: '',
 	fetchConfig: {},
 	initialItems: [],
 	request: {},

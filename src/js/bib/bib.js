@@ -80,7 +80,7 @@ class ZoteroBib {
 	}
 
 	async translateUrl(url, add = true) {
-		let translationServerUrl = `${this.opts.translationServerUrl}/web`;
+		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}web`;
 		let sessionid = this.opts.sessionid;
 		let data = Object.assign({ url, sessionid }, this.opts.request);
 
