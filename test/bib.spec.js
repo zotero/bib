@@ -49,9 +49,9 @@ describe('Zotero Bib', () => {
 						body: [zoteroItemPaper],
 						headers: headersOK
 					}
-				} else if(JSON.parse(opts.body).url.includes('newspaperArticle')) {
+				} else if(JSON.parse(opts.body).url.includes('multi')) {
 					return {
-						body: [zoteroItemPaper],
+						body: [zoteroItemBook, zoteroItemPaper],
 						headers: headersOK
 					}
 				} else {
@@ -213,9 +213,10 @@ describe('Zotero Bib', () => {
 			persist: false
 		});
 
-		const [zoteroItem] = await bib.translateUrl('http://example.com/paper');
+		const zoteroItems = await bib.translateUrl('http://example.com/multi');
 			assert(fetchRequests.length, 1);
-			assert(zoteroItem, zoteroItemPaper);
+			assert(zoteroItems[0], zoteroItemBook);
+			assert(zoteroItems[1], zoteroItemPaper);
 	});
 
 	it('should should add a translated item', async () => {
@@ -248,7 +249,7 @@ describe('Zotero Bib', () => {
 			persist: false
 		});
 		let clock = sinon.useFakeTimers(new Date(Date.UTC(2017,4,10,11,12,13)));
-		await bib.translateUrl('http://example.com/newspaperArticle');
+		await bib.translateUrl('http://example.com/paper');
 		assert.equal(bib.itemsRaw[0].accessDate, '2017-05-10 11:12:13');
 		clock.restore();
 	});
@@ -262,6 +263,6 @@ describe('Zotero Bib', () => {
 			translationServerPrefix: 'lorem/ipsum/'
 		});
 
-		await bib.translateUrl('http://example.com/newspaperArticle');
+		await bib.translateUrl('http://example.com/paper');
 	});
 });
