@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "babel-regenerator-runtime": "^6.5.0",
-    "citeproc-js": "github:tnajdek/citeproc-js",
+    "citeproc": "^2.1.178",
     "es6-promise": "^4.0.5",
     "isomorphic-fetch": "^2.2.1"
   },

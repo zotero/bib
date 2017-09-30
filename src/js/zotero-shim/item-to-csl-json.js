@@ -7,7 +7,7 @@ const {
 	CSL_TYPE_MAPPINGS
 } = require('./csl-mappings');
 
-const { CSL } = require('citeproc-js');
+const CSL = require('citeproc');
 const { getFieldIDFromTypeAndBase } = require('./type-specific-field-map');
 const fields = require('./fields');
 const itemTypes = require('./item-types');
