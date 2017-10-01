@@ -8,6 +8,7 @@ const sinon = require('sinon');
 const ZoteroBib = require('../src/js/main.js');
 const zoteroItemBook = require('./fixtures/zotero-item-book');
 const zoteroItemPaper = require('./fixtures/zotero-item-paper');
+const zoteroItemNote = require('./fixtures/zotero-item-note');
 const cslItemBook = require('./fixtures/csl-item-book');
 const cslItemPaper = require('./fixtures/csl-item-paper');
 
@@ -52,6 +53,11 @@ describe('Zotero Bib', () => {
 				} else if(JSON.parse(opts.body).url.includes('multi')) {
 					return {
 						body: [zoteroItemBook, zoteroItemPaper],
+						headers: headersOK
+					}
+				} else if(JSON.parse(opts.body).url.includes('note')) {
+					return {
+						body: [zoteroItemPaper, zoteroItemNote],
 						headers: headersOK
 					}
 				} else {
@@ -227,6 +233,17 @@ describe('Zotero Bib', () => {
 		assert.equal(bib.items.length, 0);
 		await bib.translateUrl('http://example.com/paper');
 		assert(bib.items.length, 1);
+		assert(bib.items[0], cslItemPaper);
+	});
+
+	it('should should add a translated item together with a note', async () => {
+		let bib = new ZoteroBib({
+			persist: false
+		});
+
+		assert.equal(bib.items.length, 0);
+		await bib.translateUrl('http://example.com/note');
+		assert(bib.items.length, 2);
 		assert(bib.items[0], cslItemPaper);
 	});
 
