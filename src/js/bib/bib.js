@@ -11,7 +11,6 @@ class ZoteroBib {
 			sessionid: utils.uuid4()
 		}, defaults(), opts);
 
-		this.items = [...this.opts.initialItems];
 		if(this.opts.persist && this.opts.storage) {
 			if(!('getItem' in this.opts.storage ||
 				'setItem' in this.opts.storage ||
@@ -19,22 +18,26 @@ class ZoteroBib {
 			)) {
 				throw new Error('Invalid storage engine provided');
 			}
-			this.items = [...this.items, ...this.getItemsStorage()];
+			if(this.opts.override) {
+				this.clearItems();
+			}
+			this.items = [...this.opts.initialItems, ...this.getItemsStorage()];
 			this.setItemsStorage(this.items);
+		} else {
+			this.items = [...this.opts.initialItems];
 		}
 	}
 
 	getItemsStorage() {
-		let items = this.opts.storage.getItem('items');
-		if(items) {
-			return JSON.parse(items);
-		} else {
-			return [];
-		}
+		let items = this.opts.storage.getItem(`${this.opts.storagePrefix}-items`);
+		return items ? JSON.parse(items) : [];
 	}
 
 	setItemsStorage(items) {
-		this.opts.storage.setItem('items', JSON.stringify(items));
+		this.opts.storage.setItem(
+			`${this.opts.storagePrefix}-items`,
+			JSON.stringify(items)
+		);
 	}
 
 	addItem(item) {
@@ -59,9 +62,8 @@ class ZoteroBib {
 				this.setItemsStorage(this.items);
 			}
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	clearItems() {

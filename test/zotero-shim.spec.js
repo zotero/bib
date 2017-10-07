@@ -30,8 +30,6 @@ describe('Zotero Shim', () => {
 		assert.deepInclude(itemToCSLJSON(zoteroItemPaper), cslItemPaper);
 	});
 
-
-
 	it('should convert ZoteroItem with partially empty creators field to CSL format', () => {
 		assert.deepInclude(
 			itemToCSLJSON({

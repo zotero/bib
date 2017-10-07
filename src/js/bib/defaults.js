@@ -7,5 +7,7 @@ module.exports = () => ({
 	initialItems: [],
 	request: {},
 	storage: typeof window != 'undefined' && 'localStorage' in window && window.localStorage || {},
-	persist: true
+	persist: true,
+	override: false,
+	storagePrefix: 'zotero-bib'
 });

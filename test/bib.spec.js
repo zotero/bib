@@ -133,7 +133,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should persist initial items in localStorage', () => {
-		assert.equal('items' in fakeStore.storage, false);
+		assert.equal('zotero-bib-items' in fakeStore.storage, false);
 
 		new ZoteroBib({
 			storage: fakeStore,
@@ -141,13 +141,13 @@ describe('Zotero Bib', () => {
 			initialItems: [zoteroItemBook]
 		});
 
-		assert.equal('items' in fakeStore.storage, true);
-		assert.equal(JSON.parse(fakeStore.storage.items).length, 1);
-		assert.deepInclude(JSON.parse(fakeStore.storage.items)[0], zoteroItemBook);
+		assert.equal('zotero-bib-items' in fakeStore.storage, true);
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 1);
+		assert.deepInclude(JSON.parse(fakeStore.storage['zotero-bib-items'])[0], zoteroItemBook);
 	});
 
 	it('should load initial items from localStorage without overriding initial items', () => {
-		fakeStore.storage['items'] = JSON.stringify([zoteroItemPaper]);
+		fakeStore.storage['zotero-bib-items'] = JSON.stringify([zoteroItemPaper]);
 
 		new ZoteroBib({
 			storage: fakeStore,
@@ -155,25 +155,39 @@ describe('Zotero Bib', () => {
 			initialItems: [zoteroItemBook]
 		});
 
-		assert.equal(JSON.parse(fakeStore.storage.items).length, 2);
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 2);
+	});
+
+	it('should load initial items from localStorage overriding initial items if override preference is set', () => {
+		fakeStore.storage['zotero-bib-items'] = JSON.stringify([zoteroItemPaper]);
+
+		new ZoteroBib({
+			storage: fakeStore,
+			persist: true,
+			override: true,
+			initialItems: [zoteroItemBook]
+		});
+
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 1);
+		assert.deepInclude(JSON.parse(fakeStore.storage['zotero-bib-items'])[0], zoteroItemBook);
 	});
 
 	it('should persist manually added items in localStorage', () => {
-		assert.equal('items' in fakeStore.storage, false);
+		assert.equal('zotero-bib-items' in fakeStore.storage, false);
 
 		let bib = new ZoteroBib({
 			storage: fakeStore,
 			persist: true
 		});
 
-		assert.equal(JSON.parse(fakeStore.storage.items).length, 0);
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 0);
 		bib.addItem(zoteroItemBook);
-		assert.equal(JSON.parse(fakeStore.storage.items).length, 1);
-		assert.deepInclude(JSON.parse(fakeStore.storage.items)[0], zoteroItemBook);
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 1);
+		assert.deepInclude(JSON.parse(fakeStore.storage['zotero-bib-items'])[0], zoteroItemBook);
 	});
 
 	it('should persist remove items from localStorage', () => {
-		assert.equal('items' in fakeStore, false);
+		assert.equal('zotero-bib-items' in fakeStore, false);
 
 		let bib = new ZoteroBib({
 			storage: fakeStore,
@@ -181,9 +195,9 @@ describe('Zotero Bib', () => {
 			initialItems: [zoteroItemBook]
 		});
 
-		assert.equal(JSON.parse(fakeStore.storage.items).length, 1);
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 1);
 		bib.removeItem(bib.itemsRaw[0]);
-		assert.equal(JSON.parse(fakeStore.storage.items).length, 0);
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 0);
 	});
 
 	it('should persist item changes in localStorage ', () => {
@@ -193,25 +207,42 @@ describe('Zotero Bib', () => {
 			initialItems: [zoteroItemBook]
 		});
 
-		assert.equal(JSON.parse(fakeStore.storage.items)[0].title, 'Dune');
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items'])[0].title, 'Dune');
 		bib.updateItem(0, {
 			...bib.items[0],
 			title: 'FooBar'
 		});
-		assert.equal(JSON.parse(fakeStore.storage.items)[0].title, 'FooBar');
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items'])[0].title, 'FooBar');
 	});
 
 	it('should clear items from localStorage', () => {
-		assert.equal('items' in fakeStore.storage, false);
+		assert.equal('zotero-bib-items' in fakeStore.storage, false);
 
 		let bib = new ZoteroBib({
 			storage: fakeStore,
 			persist: true,
 			initialItems: [zoteroItemBook, zoteroItemPaper]
 		});
-		assert.equal(JSON.parse(fakeStore.storage.items).length, 2);
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 2);
 		bib.clearItems();
-		assert.equal(JSON.parse(fakeStore.storage.items).length, 0);
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 0);
+	});
+
+	it('should storagePrefix preference', () => {
+		assert.equal('zotero-bib-items' in fakeStore.storage, false);
+		assert.equal('foo-items' in fakeStore.storage, false);
+		assert.equal('items' in fakeStore.storage, false);
+
+		new ZoteroBib({
+			storage: fakeStore,
+			persist: true,
+			initialItems: [zoteroItemBook],
+			storagePrefix: 'foo'
+		});
+
+		assert.equal('zotero-bib-items' in fakeStore.storage, false);
+		assert.equal('foo-items' in fakeStore.storage, true);
+		assert.equal('items' in fakeStore.storage, false);
 	});
 
 	it('should translate an url using translation server', async () => {
@@ -225,7 +256,7 @@ describe('Zotero Bib', () => {
 			assert(zoteroItems[1], zoteroItemPaper);
 	});
 
-	it('should should add a translated item', async () => {
+	it('should add a translated item', async () => {
 		let bib = new ZoteroBib({
 			persist: false
 		});
@@ -234,6 +265,16 @@ describe('Zotero Bib', () => {
 		await bib.translateUrl('http://example.com/paper');
 		assert(bib.items.length, 1);
 		assert(bib.items[0], cslItemPaper);
+	});
+
+	it('should not add a translated item if second parameter is false', async () => {
+		let bib = new ZoteroBib({
+			persist: false
+		});
+
+		assert.equal(bib.items.length, 0);
+		await bib.translateUrl('http://example.com/paper', false);
+		assert.equal(bib.items.length, 0);
 	});
 
 	it('should should add a translated item together with a note', async () => {
@@ -281,5 +322,14 @@ describe('Zotero Bib', () => {
 		});
 
 		await bib.translateUrl('http://example.com/paper');
+	});
+
+	it('should throw an error when invalid storage engine is provided', () => {
+		assert.throws(() => {
+			new ZoteroBib({
+				persist: true,
+				storage: {}
+			});
+		});
 	});
 });
