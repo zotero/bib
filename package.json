@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "babel-regenerator-runtime": "^6.5.0",
-    "citeproc": "^2.1.178",
     "es6-promise": "^4.1.1",
     "isomorphic-fetch": "^2.2.1"
   },
