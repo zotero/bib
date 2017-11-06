@@ -1,0 +1,58 @@
+{
+  "name": "zotero-bib",
+  "license": "AGPL-3.0",
+  "version": "0.3.0",
+  "private": true,
+  "description": "",
+  "repository": "",
+  "main": "lib/main.js",
+  "files": [
+    "lib",
+    "build"
+  ],
+  "config": {
+    "test_browsers": "Chrome",
+    "port": "8001",
+    "interface": "127.0.0.1",
+    "translation_server": "http://localhost:1969"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "postpublish": "rimraf lib",
+    "build": "mkdir -p build/ && mkdir -p lib/ && run-s clean build:browser build:browser-compat build:node",
+    "build:browser": "NODE_ENV=browser browserify -s ZoteroBib -d src/js/main.js -t [babelify] -o build/bib.js",
+    "build:browser-compat": "NODE_ENV=browser-compat browserify -s ZoteroBib -d src/js/main-compat.js -t [babelify] -o build/bib-compat.js",
+    "build:node": "cd src/js && babel *.js **/*.js -d ../../lib",
+    "clean": "rimraf build/* lib/*",
+    "test": "NODE_ENV=test nyc mocha",
+    "coverage": "NODE_ENV=test nyc --reporter=html --reporter=text mocha",
+    "start": "NODE_ENV=test mocha --watch"
+  },
+  "dependencies": {
+    "babel-regenerator-runtime": "^6.5.0",
+    "es6-promise": "^4.1.1",
+    "isomorphic-fetch": "^2.2.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-regenerator": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^7.3.0",
+    "babili": "^0.1.4",
+    "browserify": "^14.4.0",
+    "chai": "^4.1.2",
+    "citeproc": "^2.1.180",
+    "fetch-mock": "^5.12.2",
+    "http-server": "^0.10.0",
+    "live-reload": "^1.1.0",
+    "mocha": "^3.5.3",
+    "nodemon": "^1.12.1",
+    "npm-run-all": "^4.1.1",
+    "nyc": "^11.2.1",
+    "rimraf": "^2.6.2",
+    "sinon": "^4.0.0",
+    "watchify": "^3.9.0"
+  }
+}
