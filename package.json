@@ -1,7 +1,7 @@
 {
   "name": "zotero-bib",
   "license": "AGPL-3.0",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "description": "",
   "repository": "",
@@ -24,9 +24,9 @@
     "build:browser-compat": "NODE_ENV=browser-compat browserify -s ZoteroBib -d src/js/main-compat.js -t [babelify] -o build/bib-compat.js",
     "build:node": "cd src/js && babel *.js **/*.js -d ../../lib",
     "clean": "rimraf build/* lib/*",
-    "test": "NODE_ENV=test nyc mocha --compilers js:babel-register",
-    "coverage": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --compilers js:babel-register",
-    "start": "NODE_ENV=test mocha --watch --compilers js:babel-register"
+    "test": "NODE_ENV=test nyc mocha",
+    "coverage": "NODE_ENV=test nyc --reporter=html --reporter=text mocha",
+    "start": "NODE_ENV=test mocha --watch"
   },
   "dependencies": {
     "babel-regenerator-runtime": "^6.5.0",
@@ -43,6 +43,7 @@
     "babili": "^0.1.4",
     "browserify": "^14.4.0",
     "chai": "^4.1.2",
+    "citeproc": "^2.1.180",
     "fetch-mock": "^5.12.2",
     "http-server": "^0.10.0",
     "live-reload": "^1.1.0",

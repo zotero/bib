@@ -1,3 +1,4 @@
+/* global CSL:false */
 'use strict';
 
 const {

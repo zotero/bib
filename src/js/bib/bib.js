@@ -7,9 +7,11 @@ const dateToSql = require('../zotero-shim/date-to-sql');
 
 class ZoteroBib {
 	constructor(opts) {
-		this.opts = Object.assign({
-			sessionid: utils.uuid4()
-		}, defaults(), opts);
+		this.opts = {
+			sessionid: utils.uuid4(),
+			...defaults(),
+			...opts
+		};
 
 		if(this.opts.persist && this.opts.storage) {
 			if(!('getItem' in this.opts.storage ||
@@ -81,20 +83,43 @@ class ZoteroBib {
 		return this.items;
 	}
 
-	async translateUrl(url, add = true) {
+	async translateIdentifier(identifier, ...args) {
+		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}search`;
+		let init = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'text/plain'
+			},
+			body: identifier,
+			...this.opts.init
+		};
+
+		return await this.translate(translationServerUrl, init, ...args);
+	}
+
+	async translateUrl(url, ...args) {
 		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}web`;
 		let sessionid = this.opts.sessionid;
-		let data = Object.assign({ url, sessionid }, this.opts.request);
+		let data = {
+			url,
+			sessionid,
+			...this.opts.request
+		};
 
-		let init = Object.assign({
+		let init = {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(data)
-		}, this.opts.init);
+			body: JSON.stringify(data),
+			...this.opts.init
+		};
 
-		let response = await fetch(translationServerUrl, init);
+		return await this.translate(translationServerUrl, init, ...args);
+	}
+
+	async translate(url, fetchOptions, add=true) {
+		let response = await fetch(url, fetchOptions);
 		let items = await response.json();
 		if(Array.isArray(items)) {
 			items.forEach(item => {

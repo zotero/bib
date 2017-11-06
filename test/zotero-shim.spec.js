@@ -8,6 +8,7 @@ const zoteroItemBook = require('./fixtures/zotero-item-book');
 const zoteroItemPaper = require('./fixtures/zotero-item-paper');
 const cslItemBook = require('./fixtures/csl-item-book');
 const cslItemPaper = require('./fixtures/csl-item-paper');
+(global || window).CSL = require('citeproc');
 
 describe('Zotero Shim', () => {
 	it('should convert date to CSL format', () => {
