@@ -1,6 +1,6 @@
 module.exports = {
-	'itemKey': 'MTF25W26',
-	'itemVersion': 0,
+	'key': 'MTF25W26',
+	'version': 0,
 	'itemType': 'journalArticle',
 	'creators': [
 		{

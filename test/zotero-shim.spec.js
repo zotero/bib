@@ -34,8 +34,8 @@ describe('Zotero Shim', () => {
 	it('should convert ZoteroItem with partially empty creators field to CSL format', () => {
 		assert.deepInclude(
 			itemToCSLJSON({
-				'itemKey': 'ABCDABCD',
-				'itemVersion': 0,
+				'key': 'ABCDABCD',
+				'version': 0,
 				'itemType': 'book',
 				'creators': [{
 					'firstName': '',

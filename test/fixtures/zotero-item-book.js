@@ -1,6 +1,6 @@
 module.exports = {
-	'itemKey': 'PXZ5ISSF',
-	'itemVersion': 0,
+	'key': 'PXZ5ISSF',
+	'version': 0,
 	'itemType': 'book',
 	'creators': [{
 		'firstName': 'Frank',

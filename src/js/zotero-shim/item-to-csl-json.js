@@ -24,7 +24,7 @@ module.exports = zoteroItem => {
 
 	var cslItem = {
 		// 'id':zoteroItem.uri,
-		id: zoteroItem.itemKey,
+		id: zoteroItem.key,
 		'type':cslType
 	};
 

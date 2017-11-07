@@ -261,8 +261,8 @@ describe('Zotero Bib', () => {
 
 		const zoteroItems = await bib.translateUrl('http://example.com/multi');
 		assert.equal(fetchRequests.length, 1);
-		assert.equal(zoteroItems[0].itemKey, zoteroItemBook.itemKey);
-		assert.equal(zoteroItems[1].itemKey, zoteroItemPaper.itemKey);
+		assert.equal(zoteroItems[0].key, zoteroItemBook.key);
+		assert.equal(zoteroItems[1].key, zoteroItemPaper.key);
 	});
 
 	it('should translate an identifier using translation server', async () => {
@@ -272,7 +272,7 @@ describe('Zotero Bib', () => {
 
 		const zoteroItems = await bib.translateIdentifier('123');
 		assert.equal(fetchRequests.length, 1);
-		assert.equal(zoteroItems[0].itemKey, zoteroItemPaper.itemKey);
+		assert.equal(zoteroItems[0].key, zoteroItemPaper.key);
 	});
 
 	it('should add a translated item', async () => {
@@ -283,7 +283,7 @@ describe('Zotero Bib', () => {
 		assert.equal(bib.items.length, 0);
 		await bib.translateUrl('http://example.com/paper');
 		assert.equal(bib.items.length, 1);
-		assert.equal(bib.items[0].itemKey, zoteroItemPaper.itemKey);
+		assert.equal(bib.items[0].key, zoteroItemPaper.key);
 	});
 
 	it('should not add a translated item if second parameter is false', async () => {
@@ -304,7 +304,7 @@ describe('Zotero Bib', () => {
 		assert.equal(bib.items.length, 0);
 		await bib.translateUrl('http://example.com/note');
 		assert.equal(bib.items.length, 2);
-		assert.equal(bib.items[0].itemKey, zoteroItemPaper.itemKey);
+		assert.equal(bib.items[0].key, zoteroItemPaper.key);
 	});
 
 	it('should shouldn\'t add an untranslatable item', async () => {
