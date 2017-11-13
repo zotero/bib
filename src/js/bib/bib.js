@@ -160,6 +160,10 @@ class ZoteroBib {
 
 		return { result, items, response };
 	}
+
+	static get COMPLETE() { return COMPLETE }
+	static get MULTIPLE_ITEMS() { return MULTIPLE_ITEMS }
+	static get FAILED() { return FAILED }
 }
 
 module.exports = ZoteroBib;
