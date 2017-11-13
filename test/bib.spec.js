@@ -10,6 +10,8 @@ const zoteroItemBook = require('./fixtures/zotero-item-book');
 const zoteroItemPaper = require('./fixtures/zotero-item-paper');
 const zoteroItemNote = require('./fixtures/zotero-item-note');
 const cslItemBook = require('./fixtures/csl-item-book');
+const searchFixture = require('./fixtures/search');
+
 (global || window).CSL = require('citeproc');
 
 class FakeStore {
@@ -49,25 +51,39 @@ describe('Zotero Bib', () => {
 			fetchRequests.push({ url, opts });
 
 			try {
-				if(JSON.parse(opts.body).url.includes('book')) {
+				const body = JSON.parse(opts.body);
+				if(body.url.includes('book')) {
 					return {
 						body: [zoteroItemBook],
 						headers: headersOK
 					}
-				} else if(JSON.parse(opts.body).url.includes('paper')) {
+				} else if(body.url.includes('paper')) {
 					return {
 						body: [zoteroItemPaper],
 						headers: headersOK
 					}
-				} else if(JSON.parse(opts.body).url.includes('multi')) {
+				} else if(body.url.includes('multi')) {
 					return {
 						body: [zoteroItemBook, zoteroItemPaper],
 						headers: headersOK
 					}
-				} else if(JSON.parse(opts.body).url.includes('note')) {
+				} else if(body.url.includes('note')) {
 					return {
 						body: [zoteroItemPaper, zoteroItemNote],
 						headers: headersOK
+					}
+				} else if(body.url.includes('choice')) {
+					if('items' in body && Object.keys(searchFixture).includes(Object.keys(body.items)[0])) {
+						return {
+							body: [zoteroItemBook],
+							headers: headersOK
+						}
+					} else {
+						return {
+							status: 300,
+							body: searchFixture,
+							headers: headersOK
+						}
 					}
 				} else {
 					return {
@@ -259,10 +275,10 @@ describe('Zotero Bib', () => {
 			persist: false
 		});
 
-		const zoteroItems = await bib.translateUrl('http://example.com/multi');
+		const translationResult = await bib.translateUrl('http://example.com/multi');
 		assert.equal(fetchRequests.length, 1);
-		assert.equal(zoteroItems[0].key, zoteroItemBook.key);
-		assert.equal(zoteroItems[1].key, zoteroItemPaper.key);
+		assert.equal(translationResult.items[0].key, zoteroItemBook.key);
+		assert.equal(translationResult.items[1].key, zoteroItemPaper.key);
 	});
 
 	it('should translate an identifier using translation server', async () => {
@@ -270,9 +286,9 @@ describe('Zotero Bib', () => {
 			persist: false
 		});
 
-		const zoteroItems = await bib.translateIdentifier('123');
+		const translationResult = await bib.translateIdentifier('123');
 		assert.equal(fetchRequests.length, 1);
-		assert.equal(zoteroItems[0].key, zoteroItemPaper.key);
+		assert.equal(translationResult.items[0].key, zoteroItemPaper.key);
 	});
 
 	it('should add a translated item', async () => {
@@ -305,6 +321,27 @@ describe('Zotero Bib', () => {
 		await bib.translateUrl('http://example.com/note');
 		assert.equal(bib.items.length, 2);
 		assert.equal(bib.items[0].key, zoteroItemPaper.key);
+	});
+
+	it('should add an item picked from multiple items page', async () => {
+		let bib = new ZoteroBib({
+			persist: false
+		});
+
+		assert.equal(bib.items.length, 0);
+		const translationResult = await bib.translateUrl('http://example.com/choice');
+		assert.equal(bib.items.length, 0);
+
+		const itemKey = Object.keys(translationResult.items)[0];
+		const itemValue = translationResult.items[itemKey];
+
+		await bib.translateUrlItems(
+			'http://example.com/choice',
+			{ [itemKey]: itemValue }
+		);
+
+		assert.equal(bib.items.length, 1);
+		assert.equal(bib.items[0].key, zoteroItemBook.key);
 	});
 
 	it('should shouldn\'t add an untranslatable item', async () => {

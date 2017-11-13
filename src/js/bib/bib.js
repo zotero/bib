@@ -4,6 +4,7 @@ const utils = require('./utils');
 const defaults = require('./defaults');
 const itemToCSLJSON = require('../zotero-shim/item-to-csl-json');
 const dateToSql = require('../zotero-shim/date-to-sql');
+const [ COMPLETE, MULTIPLE_ITEMS, FAILED ] = [ 'COMPLETE', 'MULTIPLE_ITEMS', 'FAILED' ];
 
 class ZoteroBib {
 	constructor(opts) {
@@ -97,14 +98,27 @@ class ZoteroBib {
 		return await this.translate(translationServerUrl, init, ...args);
 	}
 
+	async translateUrlItems(url, items, ...args) {
+		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}web`;
+		let sessionid = this.opts.sessionid;
+		let data = { url, items, sessionid, ...this.opts.request };
+
+		let init = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data),
+			...this.opts.init
+		};
+
+		return await this.translate(translationServerUrl, init, ...args);
+	}
+
 	async translateUrl(url, ...args) {
 		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}web`;
 		let sessionid = this.opts.sessionid;
-		let data = {
-			url,
-			sessionid,
-			...this.opts.request
-		};
+		let data = { url, sessionid, ...this.opts.request };
 
 		let init = {
 			method: 'POST',
@@ -119,22 +133,32 @@ class ZoteroBib {
 	}
 
 	async translate(url, fetchOptions, add=true) {
-		let response = await fetch(url, fetchOptions);
-		let items = await response.json();
-		if(Array.isArray(items)) {
-			items.forEach(item => {
-				if(item.accessDate === 'CURRENT_TIMESTAMP') {
-					const dt = new Date(Date.now());
-					item.accessDate = dateToSql(dt, true);
-				}
+		const response = await fetch(url, fetchOptions);
+		var items, result;
 
-				if(add) {
-					this.addItem(item);
-				}
-			});
+		if(response.ok) {
+			items = await response.json();
+			if(Array.isArray(items)) {
+				items.forEach(item => {
+					if(item.accessDate === 'CURRENT_TIMESTAMP') {
+						const dt = new Date(Date.now());
+						item.accessDate = dateToSql(dt, true);
+					}
+
+					if(add) {
+						this.addItem(item);
+					}
+				});
+			}
+			result = Array.isArray(items) ? COMPLETE : FAILED;
+		} else if(response.status === 300) {
+			items = await response.json();
+			result = MULTIPLE_ITEMS;
+		} else {
+			result = FAILED
 		}
 
-		return Array.isArray(items) && items || false;
+		return { result, items, response };
 	}
 }
 
