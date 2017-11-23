@@ -64,7 +64,7 @@ class ZoteroBib {
 			if(this.opts.persist) {
 				this.setItemsStorage(this.items);
 			}
-			return true;
+			return item;
 		}
 		return false;
 	}
