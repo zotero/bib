@@ -401,6 +401,29 @@ describe('Zotero Bib', () => {
 		assert.equal(result, 'RESULT');
 	});
 
+	it('should filter out items that cannot be exported', async () => {
+		fetchMock.mock('https://example.com/export?format=ris', (url, opts) => {
+			assert.equal(opts.headers['Content-Type'], 'application/json');
+			assert.equal(JSON.parse(opts.body).length, 1);
+			return {
+				headers: {
+					'Content-Type': 'plain/text'
+				},
+				body: 'RESULT'
+			}
+		});
+
+		const bib = new ZoteroBib({
+			persist: false,
+			translationServerUrl: 'https://example.com'
+		});
+
+		bib.addItem(zoteroItemBook);
+		bib.addItem(zoteroItemNote);
+		let result = await bib.exportItems('ris');
+		assert.equal(result, 'RESULT');
+	});
+
 	it('should throw an error when invalid storage engine is provided', () => {
 		assert.throws(() => {
 			new ZoteroBib({

@@ -91,7 +91,7 @@ class ZoteroBib {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(this.items),
+			body: JSON.stringify(this.items.filter(i => 'key' in i )),
 			...this.opts.init
 		}
 		const response = await fetch(translationServerUrl, fetchOptions);
