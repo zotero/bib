@@ -84,6 +84,20 @@ class ZoteroBib {
 		return this.items;
 	}
 
+	async exportItems(format) {
+		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}export?format=${format}`;
+		let fetchOptions = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(this.items),
+			...this.opts.init
+		}
+		const response = await fetch(translationServerUrl, fetchOptions);
+		return await response.text();
+	}
+
 	async translateIdentifier(identifier, ...args) {
 		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}search`;
 		let init = {
