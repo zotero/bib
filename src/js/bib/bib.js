@@ -95,7 +95,11 @@ class ZoteroBib {
 			...this.opts.init
 		}
 		const response = await fetch(translationServerUrl, fetchOptions);
-		return await response.text();
+		if(response.ok) {
+			return await response.text();
+		} else {
+			throw new Error('Failed to export items');
+		}
 	}
 
 	async translateIdentifier(identifier, ...args) {

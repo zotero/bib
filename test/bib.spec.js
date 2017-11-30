@@ -1,7 +1,7 @@
 /* eslint-env node, mocha */
 'use strict';
 
-const assert = require('chai').assert;
+const { assert, AssertionError } = require('chai');
 const fetchMock = require('fetch-mock');
 const sinon = require('sinon');
 
@@ -422,6 +422,29 @@ describe('Zotero Bib', () => {
 		bib.addItem(zoteroItemNote);
 		let result = await bib.exportItems('ris');
 		assert.equal(result, 'RESULT');
+	});
+
+	it('should throw an error when export fails', async () => {
+		fetchMock.mock('https://example.com/export?format=ris', {
+				status: 500,
+				headers: {
+					'Content-Type': 'plain/text'
+				},
+				body: 'Server Error'
+		});
+
+		const bib = new ZoteroBib({
+			persist: false,
+			translationServerUrl: 'https://example.com'
+		});
+
+		try {
+			await bib.exportItems('ris');
+			assert.fail();
+		} catch(e) {
+			assert.instanceOf(e, Error);
+			assert.notInstanceOf(e, AssertionError);
+		}
 	});
 
 	it('should throw an error when invalid storage engine is provided', () => {
