@@ -18,7 +18,11 @@ if [ "$branch" == "release" ]; then
 fi
 
 if [ "$1" == "--bump" ]; then
-	npm version patch
+	if [ -z "$2" ]; then
+		npm version patch
+	else
+		npm version $2
+	fi
 	version=$(node -e "console.log(require('./package.json')['version'])")
 else
 	if [[ `git tag -l v$version` == "v$version" ]]; then
