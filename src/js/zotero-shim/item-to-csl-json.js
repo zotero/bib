@@ -1,6 +1,8 @@
 /* global CSL:false */
 'use strict';
 
+const baseMappings = require('zotero-base-mappings');
+
 const {
 	CSL_NAMES_MAPPINGS,
 	CSL_TEXT_MAPPINGS,
@@ -13,6 +15,15 @@ const fields = require('./fields');
 const itemTypes = require('./item-types');
 const strToDate = require('./str-to-date');
 const defaultItemTypeCreatorTypeLookup = require('./default-item-type-creator-type-lookup');
+
+const baseMappingsFlat = Object.keys(baseMappings).reduce((aggr, it) => {
+	Object.keys(baseMappings[it]).forEach(mapFrom => {
+		let key = `${it}${mapFrom}`;
+		let value = baseMappings[it][mapFrom];
+		aggr[key] = value;
+	});
+	return aggr;
+}, {});
 
 module.exports = zoteroItem => {
 	var cslType = CSL_TYPE_MAPPINGS[zoteroItem.itemType];
@@ -38,17 +49,8 @@ module.exports = zoteroItem => {
 			if(field in zoteroItem) {
 				value = zoteroItem[field];
 			} else {
-				// @NOTE: Does this need porting?
-				// if (field == 'versionNumber') {
-				// 	field = 'version'; // Until https://github.com/zotero/zotero/issues/670
-				// }
-				// var fieldID = Zotero.ItemFields.getID(field),
-				// 	typeFieldID;
-				// if(fieldID
-				// 	&& (typeFieldID = Zotero.ItemFields.getFieldIDFromTypeAndBase(itemTypeID, fieldID))
-				// ) {
-				// 	value = zoteroItem[Zotero.ItemFields.getName(typeFieldID)];
-				// }
+				const mappedField = baseMappingsFlat[`${zoteroItem.itemType}${field}`];
+				value = zoteroItem[mappedField];
 			}
 
 			if (!value) continue;

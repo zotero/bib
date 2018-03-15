@@ -7,9 +7,11 @@ const sinon = require('sinon');
 
 const ZoteroBib = require('../src/js/main.js');
 const zoteroItemBook = require('./fixtures/zotero-item-book');
+const zoteroItemBookSection = require('./fixtures/zotero-item-book-section');
 const zoteroItemPaper = require('./fixtures/zotero-item-paper');
 const zoteroItemNote = require('./fixtures/zotero-item-note');
 const cslItemBook = require('./fixtures/csl-item-book');
+const cslItemBookSection = require('./fixtures/csl-item-book-section');
 const searchFixture = require('./fixtures/search');
 
 (global || window).CSL = require('citeproc');
@@ -118,6 +120,15 @@ describe('Zotero Bib', () => {
 		bib.addItem(zoteroItemBook);
 		assert.equal(bib.itemsCSL.length, 1);
 		assert.deepInclude(bib.itemsCSL[0], cslItemBook);
+	});
+
+	it('should convert (Zotero -> CSL) items that require base mappings', () => {
+		let bib = new ZoteroBib({
+			persist: false,
+			initialItems: [zoteroItemBookSection]
+		});
+		assert.equal(bib.itemsCSL.length, 1);
+		assert.deepInclude(bib.itemsCSL[0], cslItemBookSection);
 	});
 
 	it('should remove items', () => {
