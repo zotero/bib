@@ -43,6 +43,10 @@ class ZoteroBib {
 		);
 	}
 
+	reloadItems() {
+		this.items = this.getItemsStorage();
+	}
+
 	addItem(item) {
 		this.items.push(item);
 		if(this.opts.persist) {

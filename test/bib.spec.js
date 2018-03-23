@@ -264,6 +264,29 @@ describe('Zotero Bib', () => {
 		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 0);
 	});
 
+	it('should re-load items from localStorage', () => {
+		// construct with an item in
+		const bib = new ZoteroBib({
+			storage: fakeStore,
+			persist: true,
+			override: true,
+			initialItems: [zoteroItemBook]
+		});
+		// change the state of local storage
+		fakeStore.storage['zotero-bib-items'] = JSON.stringify([zoteroItemPaper]);
+
+		// at this point bib and local storage are out of sync
+		assert.deepInclude(bib.itemsRaw[0], zoteroItemBook);
+		assert.deepInclude(JSON.parse(fakeStore.storage['zotero-bib-items'])[0], zoteroItemPaper);
+
+		// force reload items from localStorage
+		bib.reloadItems();
+
+		// now items should be in sync
+		assert.deepInclude(bib.itemsRaw[0], zoteroItemPaper);
+		assert.deepInclude(JSON.parse(fakeStore.storage['zotero-bib-items'])[0], zoteroItemPaper);
+	});
+
 	it('should storagePrefix preference', () => {
 		assert.equal('zotero-bib-items' in fakeStore.storage, false);
 		assert.equal('foo-items' in fakeStore.storage, false);
