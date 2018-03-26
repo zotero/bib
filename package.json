@@ -6,6 +6,11 @@
   "description": "",
   "repository": "",
   "main": "lib/main.js",
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
   "files": [
     "lib",
     "build"
