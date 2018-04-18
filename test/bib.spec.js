@@ -12,7 +12,8 @@ const zoteroItemPaper = require('./fixtures/zotero-item-paper');
 const zoteroItemNote = require('./fixtures/zotero-item-note');
 const cslItemBook = require('./fixtures/csl-item-book');
 const cslItemBookSection = require('./fixtures/csl-item-book-section');
-const searchFixture = require('./fixtures/search');
+const responseWebMultiple = require('./fixtures/response-web-multiple.json');
+const responseSearchMultiple = require('./fixtures/response-search-multiple.json');
 
 (global || window).CSL = require('citeproc');
 
@@ -33,20 +34,28 @@ describe('Zotero Bib', () => {
 		fakeStore = new FakeStore();
 		fetchRequests = [];
 
-		let headersOK = {
-			'Content-Type': 'application/json'
-		};
-
-		let headersBAD = {
-			'Content-Type': 'text/plain'
-		};
-
 		fetchMock.mock('/search', (url, opts) => {
 			fetchRequests.push({ url, opts });
-			return {
-				body: [zoteroItemPaper],
-				headers: headersOK
-			};
+			switch(opts.body) {
+				case 'search single':
+				case '123':
+					return {
+						body: [zoteroItemPaper],
+						headers: { 'Content-Type': 'application/json' }
+					};
+				case 'search multiple':
+					return {
+						body: responseSearchMultiple,
+						status: 300,
+						headers: { 'Content-Type': 'application/json' }
+					};
+				default:
+					return {
+						body: 'No results found',
+						status: 404,
+						headers: { 'Content-Type': 'text/plain' }
+					}
+			}
 		});
 
 		fetchMock.mock('/web', (url, opts) => {
@@ -57,46 +66,46 @@ describe('Zotero Bib', () => {
 				if(body.url.includes('book')) {
 					return {
 						body: [zoteroItemBook],
-						headers: headersOK
+						headers: { 'Content-Type': 'application/json' }
 					}
 				} else if(body.url.includes('paper')) {
 					return {
 						body: [zoteroItemPaper],
-						headers: headersOK
+						headers: { 'Content-Type': 'application/json' }
 					}
 				} else if(body.url.includes('multi')) {
 					return {
 						body: [zoteroItemBook, zoteroItemPaper],
-						headers: headersOK
+						headers: { 'Content-Type': 'application/json' }
 					}
 				} else if(body.url.includes('note')) {
 					return {
 						body: [zoteroItemPaper, zoteroItemNote],
-						headers: headersOK
+						headers: { 'Content-Type': 'application/json' }
 					}
 				} else if(body.url.includes('choice')) {
-					if('items' in body && Object.keys(searchFixture).includes(Object.keys(body.items)[0])) {
+					if('items' in body && Object.keys(responseWebMultiple).includes(Object.keys(body.items)[0])) {
 						return {
 							body: [zoteroItemBook],
-							headers: headersOK
+							headers: { 'Content-Type': 'application/json' }
 						}
 					} else {
 						return {
 							status: 300,
-							body: searchFixture,
-							headers: headersOK
+							body: responseWebMultiple,
+							headers: { 'Content-Type': 'application/json' }
 						}
 					}
 				} else {
 					return {
 						status: 501,
-						headers: headersBAD
+						headers: { 'Content-Type': 'text/plain' }
 					}
 				}
 			} catch(_) {
 				return {
 					status: 400,
-					headers: headersBAD
+					headers: { 'Content-Type': 'text/plain' }
 				}
 			}
 		});
@@ -366,6 +375,8 @@ describe('Zotero Bib', () => {
 		const translationResult = await bib.translateUrl('http://example.com/choice');
 		assert.equal(bib.items.length, 0);
 
+		assert.equal(translationResult.result, ZoteroBib.MULTIPLE_ITEMS);
+
 		const itemKey = Object.keys(translationResult.items)[0];
 		const itemValue = translationResult.items[itemKey];
 
@@ -376,6 +387,34 @@ describe('Zotero Bib', () => {
 
 		assert.equal(bib.items.length, 1);
 		assert.equal(bib.items[0].key, zoteroItemBook.key);
+	});
+
+	it('should add a an item when it\'s a single search result', async () => {
+		let bib = new ZoteroBib({
+			persist: false
+		});
+		assert.equal(bib.items.length, 0);
+		const translationResult = await bib.translateIdentifier('search single');
+
+		assert.equal(translationResult.result, ZoteroBib.COMPLETE);
+		assert.equal(bib.items.length, 1);
+		assert.equal(bib.items[0].key, zoteroItemPaper.key);
+	});
+
+	it('should return a list of items for search with multiple results', async () => {
+		let bib = new ZoteroBib({
+			persist: false
+		});
+		assert.equal(bib.items.length, 0);
+		const searchResult = await bib.translateIdentifier('search multiple');
+
+		assert.equal(searchResult.result, ZoteroBib.MULTIPLE_ITEMS);
+		assert.equal(Object.keys(searchResult.items).length, 3);
+		assert.equal(bib.items.length, 0);
+
+		const [identifier, data] = Object.entries(searchResult.items)[0];
+		assert.include(Object.keys(responseSearchMultiple), identifier);
+		assert.deepInclude(Object.values(responseSearchMultiple), data);
 	});
 
 	it('should shouldn\'t add an untranslatable item', async () => {
