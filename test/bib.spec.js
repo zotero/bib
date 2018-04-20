@@ -51,9 +51,9 @@ describe('Zotero Bib', () => {
 					};
 				default:
 					return {
-						body: 'No results found',
-						status: 404,
-						headers: { 'Content-Type': 'text/plain' }
+						body: [],
+						status: 200,
+						headers: { 'Content-Type': 'application/json' }
 					}
 			}
 		});
@@ -415,6 +415,18 @@ describe('Zotero Bib', () => {
 		const [identifier, data] = Object.entries(searchResult.items)[0];
 		assert.include(Object.keys(responseSearchMultiple), identifier);
 		assert.deepInclude(Object.values(responseSearchMultiple), data);
+	});
+
+	it('should handle no search results', async () => {
+		let bib = new ZoteroBib({
+			persist: false
+		});
+		assert.equal(bib.items.length, 0);
+		const translationResult = await bib.translateIdentifier('search empty');
+
+		assert.equal(translationResult.result, ZoteroBib.COMPLETE);
+		assert.deepEqual(translationResult.items, []);
+		assert.equal(bib.items.length, 0);
 	});
 
 	it('should shouldn\'t add an untranslatable item', async () => {
