@@ -540,4 +540,34 @@ describe('Zotero Bib', () => {
 			});
 		});
 	});
+
+	it('should throw an error when adding invalid item', () => {
+		const bib = new ZoteroBib({
+			persist: false
+		});
+		assert.throws(() => { bib.addItem(null); });
+		assert.throws(() => { bib.addItem('random string'); });
+		assert.throws(() => { bib.addItem(123); });
+		assert.throws(() => { bib.addItem({}); });
+		assert.throws(() => { bib.addItem({ title: 'some title'}); });
+	});
+
+	it('should make sure that items loaded from storage look like Zotero items', () => {
+		fakeStore.storage['zotero-bib-items'] = JSON.stringify([
+			null,
+			'random string',
+			zoteroItemPaper,
+			123,
+			{},
+			{ title: 'some title'}
+		]);
+
+		const bib = new ZoteroBib({
+			storage: fakeStore,
+			persist: true
+		});
+
+		assert.equal(JSON.parse(fakeStore.storage['zotero-bib-items']).length, 1);
+		assert.deepInclude(bib.itemsRaw[0], zoteroItemPaper);
+	});
 });

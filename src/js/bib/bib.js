@@ -1,6 +1,6 @@
 'use strict';
 
-const utils = require('./utils');
+const { uuid4, isLikeZoteroItem } = require('./utils');
 const defaults = require('./defaults');
 const itemToCSLJSON = require('../zotero-shim/item-to-csl-json');
 const dateToSql = require('../zotero-shim/date-to-sql');
@@ -9,7 +9,7 @@ const [ COMPLETE, MULTIPLE_ITEMS, FAILED ] = [ 'COMPLETE', 'MULTIPLE_ITEMS', 'FA
 class ZoteroBib {
 	constructor(opts) {
 		this.opts = {
-			sessionid: utils.uuid4(),
+			sessionid: uuid4(),
 			...defaults(),
 			...opts
 		};
@@ -24,10 +24,11 @@ class ZoteroBib {
 			if(this.opts.override) {
 				this.clearItems();
 			}
-			this.items = [...this.opts.initialItems, ...this.getItemsStorage()];
+			this.items = [...this.opts.initialItems, ...this.getItemsStorage()]
+				.filter(isLikeZoteroItem);
 			this.setItemsStorage(this.items);
 		} else {
-			this.items = [...this.opts.initialItems];
+			this.items = [...this.opts.initialItems].filter(isLikeZoteroItem);
 		}
 	}
 
@@ -48,6 +49,9 @@ class ZoteroBib {
 	}
 
 	addItem(item) {
+		if(!isLikeZoteroItem(item)) {
+			throw new Error('Failed to add item');
+		}
 		this.items.push(item);
 		if(this.opts.persist) {
 			this.setItemsStorage(this.items);
