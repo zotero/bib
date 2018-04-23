@@ -435,11 +435,9 @@ describe('Zotero Bib', () => {
 		});
 
 		assert.equal(bib.itemsCSL.length, 0);
-		try {
-			await bib.translateUrl('http://example.com/');
-		} catch(_) {
-			// ignore
-		}
+
+		let translationResult = await bib.translateUrl('http://example.com/');
+		assert.equal(translationResult.result, ZoteroBib.FAILED);
 		assert.equal(bib.itemsCSL.length, 0);
 	});
 
