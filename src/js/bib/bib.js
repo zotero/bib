@@ -93,7 +93,7 @@ class ZoteroBib {
 	}
 
 	async exportItems(format) {
-		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}export?format=${format}`;
+		let translationServerURL = `${this.opts.translationServerURL}/${this.opts.translationServerPrefix}export?format=${format}`;
 		let fetchOptions = {
 			method: 'POST',
 			headers: {
@@ -102,7 +102,7 @@ class ZoteroBib {
 			body: JSON.stringify(this.items.filter(i => 'key' in i )),
 			...this.opts.init
 		}
-		const response = await fetch(translationServerUrl, fetchOptions);
+		const response = await fetch(translationServerURL, fetchOptions);
 		if(response.ok) {
 			return await response.text();
 		} else {
@@ -111,7 +111,7 @@ class ZoteroBib {
 	}
 
 	async translateIdentifier(identifier, ...args) {
-		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}search`;
+		let translationServerURL = `${this.opts.translationServerURL}/${this.opts.translationServerPrefix}search`;
 		let init = {
 			method: 'POST',
 			headers: {
@@ -121,11 +121,11 @@ class ZoteroBib {
 			...this.opts.init
 		};
 
-		return await this.translate(translationServerUrl, init, ...args);
+		return await this.translate(translationServerURL, init, ...args);
 	}
 
 	async translateUrlItems(url, items, ...args) {
-		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}web`;
+		let translationServerURL = `${this.opts.translationServerURL}/${this.opts.translationServerPrefix}web`;
 		let sessionid = this.opts.sessionid;
 		let data = { url, items, sessionid, ...this.opts.request };
 
@@ -138,11 +138,11 @@ class ZoteroBib {
 			...this.opts.init
 		};
 
-		return await this.translate(translationServerUrl, init, ...args);
+		return await this.translate(translationServerURL, init, ...args);
 	}
 
 	async translateUrl(url, ...args) {
-		let translationServerUrl = `${this.opts.translationServerUrl}/${this.opts.translationServerPrefix}web`;
+		let translationServerURL = `${this.opts.translationServerURL}/${this.opts.translationServerPrefix}web`;
 		let sessionid = this.opts.sessionid;
 		let data = { url, sessionid, ...this.opts.request };
 
@@ -155,7 +155,7 @@ class ZoteroBib {
 			...this.opts.init
 		};
 
-		return await this.translate(translationServerUrl, init, ...args);
+		return await this.translate(translationServerURL, init, ...args);
 	}
 
 	async translate(url, fetchOptions, add=true) {

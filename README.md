@@ -14,7 +14,7 @@ Quick start
 ```
 let bib = new ZoteroBib({
 	persist: false,
-	translationServerUrl: 'http://my-translation.server.example.com:1234'
+	translationServerURL: 'http://my-translation.server.example.com:1234'
 });
 ```
 
@@ -52,6 +52,6 @@ const fileStorage = new LocalStorage('./my-citations');
 
 let bib = new ZoteroBib({
 	storage: fileStorage,
-	translationServerUrl: 'http://my-translation.server.example.com:1234'
+	translationServerURL: 'http://my-translation.server.example.com:1234'
 });
 ```

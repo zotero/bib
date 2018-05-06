@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = () => ({
-	translationServerUrl: typeof window != 'undefined' && window.location.origin || '',
+	translationServerURL: typeof window != 'undefined' && window.location.origin || '',
 	translationServerPrefix: '',
 	fetchConfig: {},
 	initialItems: [],
