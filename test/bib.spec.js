@@ -474,13 +474,13 @@ describe('Zotero Bib', () => {
 		clock.restore();
 	});
 
-	it('should accept translationServerURL and translationServerPrefix', async () => {
+	it('should accept translateURL and translatePrefix', async () => {
 		fetchMock.mock('https://example.com/lorem/ipsum/web', zoteroItemBook);
 
 		let bib = new ZoteroBib({
 			persist: false,
-			translationServerURL: 'https://example.com',
-			translationServerPrefix: 'lorem/ipsum/'
+			translateURL: 'https://example.com',
+			translatePrefix: 'lorem/ipsum/'
 		});
 
 		await bib.translateUrl('http://example.com/paper');
@@ -499,7 +499,7 @@ describe('Zotero Bib', () => {
 
 		const bib = new ZoteroBib({
 			persist: false,
-			translationServerURL: 'https://example.com'
+			translateURL: 'https://example.com'
 		});
 
 		bib.addItem(zoteroItemBook);
@@ -521,7 +521,7 @@ describe('Zotero Bib', () => {
 
 		const bib = new ZoteroBib({
 			persist: false,
-			translationServerURL: 'https://example.com'
+			translateURL: 'https://example.com'
 		});
 
 		bib.addItem(zoteroItemBook);
@@ -541,7 +541,7 @@ describe('Zotero Bib', () => {
 
 		const bib = new ZoteroBib({
 			persist: false,
-			translationServerURL: 'https://example.com'
+			translateURL: 'https://example.com'
 		});
 
 		try {
