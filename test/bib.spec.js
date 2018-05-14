@@ -49,6 +49,15 @@ describe('Zotero Bib', () => {
 						status: 300,
 						headers: { 'Content-Type': 'application/json' }
 					};
+				case 'search more':
+					return {
+						body: responseSearchMultiple,
+						status: 300,
+						headers: {
+							'Content-Type': 'application/json',
+							'Link': '</search?start=ABC>; rel="next"'
+						}
+					};
 				default:
 					return {
 						body: [],
@@ -427,6 +436,20 @@ describe('Zotero Bib', () => {
 		assert.equal(translationResult.result, ZoteroBib.COMPLETE);
 		assert.deepEqual(translationResult.items, []);
 		assert.equal(bib.items.length, 0);
+	});
+
+	it('should parse Link headers', async () => {
+		let bib = new ZoteroBib({
+			persist: false
+		});
+		assert.equal(bib.items.length, 0);
+		const searchResult = await bib.translateIdentifier('search more');
+
+		assert.equal(searchResult.result, ZoteroBib.MULTIPLE_ITEMS);
+		assert.deepInclude(searchResult.links.next, {
+			url: '/search?start=ABC',
+			rel: 'next'
+		});
 	});
 
 	it('should shouldn\'t add an untranslatable item', async () => {

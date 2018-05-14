@@ -1,9 +1,10 @@
 'use strict';
 
-const { uuid4, isLikeZoteroItem } = require('./utils');
+const dateToSql = require('../zotero-shim/date-to-sql');
 const defaults = require('./defaults');
 const itemToCSLJSON = require('../zotero-shim/item-to-csl-json');
-const dateToSql = require('../zotero-shim/date-to-sql');
+const parseLinkHeader = require('parse-link-header');
+const { uuid4, isLikeZoteroItem } = require('./utils');
 const [ COMPLETE, MULTIPLE_ITEMS, FAILED ] = [ 'COMPLETE', 'MULTIPLE_ITEMS', 'FAILED' ];
 
 class ZoteroBib {
@@ -160,8 +161,11 @@ class ZoteroBib {
 
 	async translate(url, fetchOptions, add=true) {
 		const response = await fetch(url, fetchOptions);
-		var items, result;
+		var items, result, links = {};
 
+		if(response.headers.has('Link')) {
+			links = parseLinkHeader(response.headers.get('Link'));
+		}
 		if(response.ok) {
 			items = await response.json();
 			if(Array.isArray(items)) {
@@ -170,7 +174,6 @@ class ZoteroBib {
 						const dt = new Date(Date.now());
 						item.accessDate = dateToSql(dt, true);
 					}
-
 					if(add) {
 						this.addItem(item);
 					}
@@ -184,7 +187,7 @@ class ZoteroBib {
 			result = FAILED
 		}
 
-		return { result, items, response };
+		return { result, items, response, links };
 	}
 
 	static get COMPLETE() { return COMPLETE }
