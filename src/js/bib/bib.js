@@ -111,8 +111,8 @@ class ZoteroBib {
 		}
 	}
 
-	async translateIdentifier(identifier, ...args) {
-		let translateURL = `${this.opts.translateURL}/${this.opts.translatePrefix}search`;
+	async translateIdentifier(identifier, { endpoint = '/search', ...opts } = {}) {
+		let translateURL = `${this.opts.translateURL}${this.opts.translatePrefix}${endpoint}`;
 		let init = {
 			method: 'POST',
 			headers: {
@@ -122,11 +122,11 @@ class ZoteroBib {
 			...this.opts.init
 		};
 
-		return await this.translate(translateURL, init, ...args);
+		return await this.translate(translateURL, init, opts);
 	}
 
-	async translateUrlItems(url, items, ...args) {
-		let translateURL = `${this.opts.translateURL}/${this.opts.translatePrefix}web`;
+	async translateUrlItems(url, items, { endpoint = '/web', ...opts } = {}) {
+		let translateURL = `${this.opts.translateURL}${this.opts.translatePrefix}${endpoint}`;
 		let sessionid = this.opts.sessionid;
 		let data = { url, items, sessionid, ...this.opts.request };
 
@@ -139,11 +139,11 @@ class ZoteroBib {
 			...this.opts.init
 		};
 
-		return await this.translate(translateURL, init, ...args);
+		return await this.translate(translateURL, init, opts);
 	}
 
-	async translateUrl(url, ...args) {
-		let translateURL = `${this.opts.translateURL}/${this.opts.translatePrefix}web`;
+	async translateUrl(url, { endpoint = '/web', ...opts } = {}) {
+		let translateURL = `${this.opts.translateURL}${this.opts.translatePrefix}${endpoint}`;
 		let sessionid = this.opts.sessionid;
 		let data = { url, sessionid, ...this.opts.request };
 
@@ -156,10 +156,10 @@ class ZoteroBib {
 			...this.opts.init
 		};
 
-		return await this.translate(translateURL, init, ...args);
+		return await this.translate(translateURL, init, opts);
 	}
 
-	async translate(url, fetchOptions, add=true) {
+	async translate(url, fetchOptions, { add = true } = {}) {
 		const response = await fetch(url, fetchOptions);
 		var items, result, links = {};
 

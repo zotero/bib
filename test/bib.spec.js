@@ -354,14 +354,25 @@ describe('Zotero Bib', () => {
 		assert.equal(bib.items[0].key, zoteroItemPaper.key);
 	});
 
-	it('should not add a translated item if second parameter is false', async () => {
+	it('should not add a translated item if optional add is set to false', async () => {
 		let bib = new ZoteroBib({
 			persist: false
 		});
 
 		assert.equal(bib.items.length, 0);
-		await bib.translateUrl('http://example.com/paper', false);
+		await bib.translateUrl('http://example.com/paper', { add: false });
 		assert.equal(bib.items.length, 0);
+	});
+
+	it('should accept endpoint as an optional opt', async () => {
+		fetchMock.mock('https://example.com/foo?next=123', zoteroItemBook);
+
+		let bib = new ZoteroBib({
+			persist: false,
+			translateURL: 'https://example.com'
+		});
+
+		await bib.translateUrl('http://example.com/paper', { endpoint: '/foo?next=123' });
 	});
 
 	it('should add a translated item together with a note', async () => {
@@ -480,7 +491,7 @@ describe('Zotero Bib', () => {
 		let bib = new ZoteroBib({
 			persist: false,
 			translateURL: 'https://example.com',
-			translatePrefix: 'lorem/ipsum/'
+			translatePrefix: '/lorem/ipsum'
 		});
 
 		await bib.translateUrl('http://example.com/paper');
