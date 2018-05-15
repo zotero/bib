@@ -7,7 +7,7 @@ Zotero Bib is a library that can process URLs into CSL-JSON bibliography items. 
 
 Quick start
 -------------
-1. Install and start (translation server)[https://github.com/zotero/translation-server]
+1. Install and start [translation server](https://github.com/zotero/translation-server)
 
 2. Configure the library to work with the translation server
 
@@ -42,9 +42,9 @@ This behaviour can be prevented using second, optional argument to `bib.translat
 
 Persistence
 -----------
-In the example above, after refreshing the page (or restarting a node script), all previosly translated, cached items are lost. If that's not desired behaviour, ZoteroBib accepts any (Web Storage)[https://developer.mozilla.org/en/docs/Web/API/Storage] compatible container for persistance. In fact, by default, it will attempt to use (Local Storage)[https://developer.mozilla.org/en/docs/Web/API/Window/localStorage] for persistence.
+In the example above, after refreshing the page (or restarting a node script), all previosly translated, cached items are lost. If that's not desired behaviour, ZoteroBib accepts any [Web Storage](https://developer.mozilla.org/en/docs/Web/API/Storage) compatible container for persistance. In fact, by default, it will attempt to use [Local Storage](https://developer.mozilla.org/en/docs/Web/API/Window/localStorage) for persistence.
 
-If you're running ZoteroBib in node, you'll either need to disable persistence (as in the example above) or provide your own Web Storage compatible container (e.g. (node-localstorage)[https://github.com/lmaccherone/node-localstorage]):
+If you're running ZoteroBib in node, you'll either need to disable persistence (as in the example above) or provide your own Web Storage compatible container (e.g. [node-localstorage](https://github.com/lmaccherone/node-localstorage)):
 
 ```
 const LocalStorage = require('node-localstorage').LocalStorage;
