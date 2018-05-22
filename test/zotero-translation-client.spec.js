@@ -5,7 +5,7 @@ const { assert, AssertionError } = require('chai');
 const fetchMock = require('fetch-mock');
 const sinon = require('sinon');
 
-const ZoteroBib = require('../src/js/main.js');
+const ZoteroTranslationClient = require('../src/js/main.js');
 const zoteroItemBook = require('./fixtures/zotero-item-book');
 const zoteroItemBookSection = require('./fixtures/zotero-item-book-section');
 const zoteroItemPaper = require('./fixtures/zotero-item-paper');
@@ -24,7 +24,7 @@ class FakeStore {
 	clear() { this.storage = {} }
 }
 
-describe('Zotero Bib', () => {
+describe('Zotero Translation Client', () => {
 	var fakeStore,
 		fetchRequests;
 
@@ -122,7 +122,7 @@ describe('Zotero Bib', () => {
 
 
 	it('should convert (Zotero -> CSL) initial items', () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false,
 			initialItems: [zoteroItemBook]
 		});
@@ -131,7 +131,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should convert (Zotero -> CSL) manually added items', () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 		assert.equal(bib.items.length, 0);
@@ -141,7 +141,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should convert (Zotero -> CSL) items that require base mappings', () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false,
 			initialItems: [zoteroItemBookSection]
 		});
@@ -150,7 +150,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should remove items', () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false,
 			initialItems: [zoteroItemBook]
 		});
@@ -163,7 +163,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should update an item', () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false,
 			initialItems: [zoteroItemBook]
 		});
@@ -177,7 +177,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should clear items', () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false,
 			initialItems: [zoteroItemBook, zoteroItemPaper]
 		});
@@ -189,7 +189,7 @@ describe('Zotero Bib', () => {
 	it('should persist initial items in localStorage', () => {
 		assert.equal('zotero-bib-items' in fakeStore.storage, false);
 
-		new ZoteroBib({
+		new ZoteroTranslationClient({
 			storage: fakeStore,
 			persist: true,
 			initialItems: [zoteroItemBook]
@@ -203,7 +203,7 @@ describe('Zotero Bib', () => {
 	it('should load initial items from localStorage without overriding initial items', () => {
 		fakeStore.storage['zotero-bib-items'] = JSON.stringify([zoteroItemPaper]);
 
-		new ZoteroBib({
+		new ZoteroTranslationClient({
 			storage: fakeStore,
 			persist: true,
 			initialItems: [zoteroItemBook]
@@ -215,7 +215,7 @@ describe('Zotero Bib', () => {
 	it('should load initial items from localStorage overriding initial items if override preference is set', () => {
 		fakeStore.storage['zotero-bib-items'] = JSON.stringify([zoteroItemPaper]);
 
-		new ZoteroBib({
+		new ZoteroTranslationClient({
 			storage: fakeStore,
 			persist: true,
 			override: true,
@@ -229,7 +229,7 @@ describe('Zotero Bib', () => {
 	it('should persist manually added items in localStorage', () => {
 		assert.equal('zotero-bib-items' in fakeStore.storage, false);
 
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			storage: fakeStore,
 			persist: true
 		});
@@ -243,7 +243,7 @@ describe('Zotero Bib', () => {
 	it('should persist remove items from localStorage', () => {
 		assert.equal('zotero-bib-items' in fakeStore, false);
 
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			storage: fakeStore,
 			persist: true,
 			initialItems: [zoteroItemBook]
@@ -255,7 +255,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should persist item changes in localStorage ', () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			storage: fakeStore,
 			persist: true,
 			initialItems: [zoteroItemBook]
@@ -272,7 +272,7 @@ describe('Zotero Bib', () => {
 	it('should clear items from localStorage', () => {
 		assert.equal('zotero-bib-items' in fakeStore.storage, false);
 
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			storage: fakeStore,
 			persist: true,
 			initialItems: [zoteroItemBook, zoteroItemPaper]
@@ -284,7 +284,7 @@ describe('Zotero Bib', () => {
 
 	it('should re-load items from localStorage', () => {
 		// construct with an item in
-		const bib = new ZoteroBib({
+		const bib = new ZoteroTranslationClient({
 			storage: fakeStore,
 			persist: true,
 			override: true,
@@ -310,7 +310,7 @@ describe('Zotero Bib', () => {
 		assert.equal('foo-items' in fakeStore.storage, false);
 		assert.equal('items' in fakeStore.storage, false);
 
-		new ZoteroBib({
+		new ZoteroTranslationClient({
 			storage: fakeStore,
 			persist: true,
 			initialItems: [zoteroItemBook],
@@ -323,7 +323,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should translate an url using translation server', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 
@@ -334,7 +334,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should translate an identifier using translation server', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 
@@ -344,7 +344,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should add a translated item', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 
@@ -355,7 +355,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should not add a translated item if optional add is set to false', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 
@@ -367,7 +367,7 @@ describe('Zotero Bib', () => {
 	it('should accept endpoint as an optional opt', async () => {
 		fetchMock.mock('https://example.com/foo?next=123', zoteroItemBook);
 
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false,
 			translateURL: 'https://example.com'
 		});
@@ -376,7 +376,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should add a translated item together with a note', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 
@@ -387,7 +387,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should add an item picked from multiple items page', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 
@@ -395,7 +395,7 @@ describe('Zotero Bib', () => {
 		const translationResult = await bib.translateUrl('http://example.com/choice');
 		assert.equal(bib.items.length, 0);
 
-		assert.equal(translationResult.result, ZoteroBib.MULTIPLE_ITEMS);
+		assert.equal(translationResult.result, ZoteroTranslationClient.MULTIPLE_ITEMS);
 
 		const itemKey = Object.keys(translationResult.items)[0];
 		const itemValue = translationResult.items[itemKey];
@@ -410,25 +410,25 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should add a an item when it\'s a single search result', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 		assert.equal(bib.items.length, 0);
 		const translationResult = await bib.translateIdentifier('search single');
 
-		assert.equal(translationResult.result, ZoteroBib.COMPLETE);
+		assert.equal(translationResult.result, ZoteroTranslationClient.COMPLETE);
 		assert.equal(bib.items.length, 1);
 		assert.equal(bib.items[0].key, zoteroItemPaper.key);
 	});
 
 	it('should return a list of items for search with multiple results', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 		assert.equal(bib.items.length, 0);
 		const searchResult = await bib.translateIdentifier('search multiple');
 
-		assert.equal(searchResult.result, ZoteroBib.MULTIPLE_ITEMS);
+		assert.equal(searchResult.result, ZoteroTranslationClient.MULTIPLE_ITEMS);
 		assert.equal(Object.keys(searchResult.items).length, 3);
 		assert.equal(bib.items.length, 0);
 
@@ -438,25 +438,25 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should handle no search results', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 		assert.equal(bib.items.length, 0);
 		const translationResult = await bib.translateIdentifier('search empty');
 
-		assert.equal(translationResult.result, ZoteroBib.COMPLETE);
+		assert.equal(translationResult.result, ZoteroTranslationClient.COMPLETE);
 		assert.deepEqual(translationResult.items, []);
 		assert.equal(bib.items.length, 0);
 	});
 
 	it('should parse Link headers', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 		assert.equal(bib.items.length, 0);
 		const searchResult = await bib.translateIdentifier('search more');
 
-		assert.equal(searchResult.result, ZoteroBib.MULTIPLE_ITEMS);
+		assert.equal(searchResult.result, ZoteroTranslationClient.MULTIPLE_ITEMS);
 		assert.deepInclude(searchResult.links.next, {
 			url: '/search?start=ABC',
 			rel: 'next'
@@ -464,19 +464,19 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should shouldn\'t add an untranslatable item', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 
 		assert.equal(bib.itemsCSL.length, 0);
 
 		let translationResult = await bib.translateUrl('http://example.com/');
-		assert.equal(translationResult.result, ZoteroBib.FAILED);
+		assert.equal(translationResult.result, ZoteroTranslationClient.FAILED);
 		assert.equal(bib.itemsCSL.length, 0);
 	});
 
 	it('should replace CURRENT_TIMESTAMP with actual timestamp on translation', async () => {
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
 		let clock = sinon.useFakeTimers(new Date(Date.UTC(2017,4,10,11,12,13)));
@@ -488,7 +488,7 @@ describe('Zotero Bib', () => {
 	it('should accept translateURL and translatePrefix', async () => {
 		fetchMock.mock('https://example.com/lorem/ipsum/web', zoteroItemBook);
 
-		let bib = new ZoteroBib({
+		let bib = new ZoteroTranslationClient({
 			persist: false,
 			translateURL: 'https://example.com',
 			translatePrefix: '/lorem/ipsum'
@@ -508,7 +508,7 @@ describe('Zotero Bib', () => {
 			}
 		});
 
-		const bib = new ZoteroBib({
+		const bib = new ZoteroTranslationClient({
 			persist: false,
 			translateURL: 'https://example.com'
 		});
@@ -530,7 +530,7 @@ describe('Zotero Bib', () => {
 			}
 		});
 
-		const bib = new ZoteroBib({
+		const bib = new ZoteroTranslationClient({
 			persist: false,
 			translateURL: 'https://example.com'
 		});
@@ -550,7 +550,7 @@ describe('Zotero Bib', () => {
 				body: 'Server Error'
 		});
 
-		const bib = new ZoteroBib({
+		const bib = new ZoteroTranslationClient({
 			persist: false,
 			translateURL: 'https://example.com'
 		});
@@ -566,7 +566,7 @@ describe('Zotero Bib', () => {
 
 	it('should throw an error when invalid storage engine is provided', () => {
 		assert.throws(() => {
-			new ZoteroBib({
+			new ZoteroTranslationClient({
 				persist: true,
 				storage: {}
 			});
@@ -574,7 +574,7 @@ describe('Zotero Bib', () => {
 	});
 
 	it('should throw an error when adding invalid item', () => {
-		const bib = new ZoteroBib({
+		const bib = new ZoteroTranslationClient({
 			persist: false
 		});
 		assert.throws(() => { bib.addItem(null); });
@@ -594,7 +594,7 @@ describe('Zotero Bib', () => {
 			{ title: 'some title'}
 		]);
 
-		const bib = new ZoteroBib({
+		const bib = new ZoteroTranslationClient({
 			storage: fakeStore,
 			persist: true
 		});

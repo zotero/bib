@@ -1,4 +1,4 @@
 'use strict';
 
-const ZoteroBib = require('./bib/bib');
-module.exports = ZoteroBib;
+const ZoteroTranslationClient = require('./zotero-translation-client');
+module.exports = ZoteroTranslationClient;

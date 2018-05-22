@@ -1,21 +1,22 @@
 {
   "env": {
-    "browser": {
+    "production": {
       "presets": [
-        "babili"
-      ]
-    },
-    "browser-compat": {
-      "presets": [
-        "es2015",
-        "babili"
+        "es2015", "stage-2"
       ],
       "plugins": [
-        "transform-async-to-generator"
+        "transform-async-to-generator",
+        "transform-object-rest-spread",
+        ["transform-runtime", {
+          "helpers": false,
+          "polyfill": false,
+          "regenerator": true
+        }]
       ]
     }
   },
+  "presets": ["stage-2"],
   "plugins": [
-    "transform-object-rest-spread"
+    "transform-object-rest-spread",
   ]
 }

@@ -1,13 +1,13 @@
 'use strict';
 
-const dateToSql = require('../zotero-shim/date-to-sql');
+const dateToSql = require('./zotero-shim/date-to-sql');
 const defaults = require('./defaults');
-const itemToCSLJSON = require('../zotero-shim/item-to-csl-json');
+const itemToCSLJSON = require('./zotero-shim/item-to-csl-json');
 const parseLinkHeader = require('parse-link-header');
 const { uuid4, isLikeZoteroItem } = require('./utils');
 const [ COMPLETE, MULTIPLE_ITEMS, FAILED ] = [ 'COMPLETE', 'MULTIPLE_ITEMS', 'FAILED' ];
 
-class ZoteroBib {
+class ZoteroTranslationClient {
 	constructor(opts) {
 		this.opts = {
 			sessionid: uuid4(),
@@ -195,4 +195,4 @@ class ZoteroBib {
 	static get FAILED() { return FAILED }
 }
 
-module.exports = ZoteroBib;
+module.exports = ZoteroTranslationClient;
