@@ -2,8 +2,8 @@
 'use strict';
 
 const assert = require('chai').assert;
-const strToDate = require('../src/js/zotero-shim/str-to-date');
-const itemToCSLJSON = require('../src/js/zotero-shim/item-to-csl-json');
+const strToDate = require('../src/zotero-shim/str-to-date');
+const itemToCSLJSON = require('../src/zotero-shim/item-to-csl-json');
 const zoteroItemBook = require('./fixtures/zotero-item-book');
 const zoteroItemPaper = require('./fixtures/zotero-item-paper');
 const cslItemBook = require('./fixtures/csl-item-book');

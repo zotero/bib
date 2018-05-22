@@ -5,7 +5,7 @@ const { assert, AssertionError } = require('chai');
 const fetchMock = require('fetch-mock');
 const sinon = require('sinon');
 
-const ZoteroTranslationClient = require('../src/js/main.js');
+const ZoteroTranslationClient = require('../src/main.js');
 const zoteroItemBook = require('./fixtures/zotero-item-book');
 const zoteroItemBookSection = require('./fixtures/zotero-item-book-section');
 const zoteroItemPaper = require('./fixtures/zotero-item-paper');
