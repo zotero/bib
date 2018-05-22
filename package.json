@@ -30,7 +30,6 @@
     "start": "NODE_ENV=test mocha --watch"
   },
   "dependencies": {
-    "babel-regenerator-runtime": "^6.5.0",
     "isomorphic-fetch": "^2.2.1",
     "parse-link-header": "^1.0.1",
     "zotero-base-mappings": "0.0.2"

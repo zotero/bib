@@ -1,5 +1,6 @@
 'use strict';
 
+require('isomorphic-fetch');
 const dateToSql = require('./zotero-shim/date-to-sql');
 const defaults = require('./defaults');
 const itemToCSLJSON = require('./zotero-shim/item-to-csl-json');
