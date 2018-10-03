@@ -11,7 +11,6 @@ const [ COMPLETE, MULTIPLE_ITEMS, FAILED ] = [ 'COMPLETE', 'MULTIPLE_ITEMS', 'FA
 class ZoteroTranslationClient {
 	constructor(opts) {
 		this.opts = {
-			sessionid: uuid4(),
 			...defaults(),
 			...opts
 		};
@@ -128,8 +127,7 @@ class ZoteroTranslationClient {
 
 	async translateUrlItems(url, items, { endpoint = '/web', ...opts } = {}) {
 		let translateURL = `${this.opts.translateURL}${this.opts.translatePrefix}${endpoint}`;
-		let sessionid = this.opts.sessionid;
-		let data = { url, items, sessionid, ...this.opts.request };
+		let data = { url, items, session: this.session, ...this.opts.request };
 
 		let init = {
 			method: 'POST',
@@ -145,15 +143,13 @@ class ZoteroTranslationClient {
 
 	async translateUrl(url, { endpoint = '/web', ...opts } = {}) {
 		let translateURL = `${this.opts.translateURL}${this.opts.translatePrefix}${endpoint}`;
-		let sessionid = this.opts.sessionid;
-		let data = { url, sessionid, ...this.opts.request };
 
 		let init = {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'text/plain'
 			},
-			body: JSON.stringify(data),
+			body: url,
 			...this.opts.init
 		};
 
@@ -182,7 +178,13 @@ class ZoteroTranslationClient {
 			}
 			result = Array.isArray(items) ? COMPLETE : FAILED;
 		} else if(response.status === 300) {
-			items = await response.json();
+			var data = await response.json();
+			if('items' in data && 'session' in data) {
+				this.session = data.session;
+				items = data.items;
+			} else {
+				items = data;
+			}
 			result = MULTIPLE_ITEMS;
 		} else {
 			result = FAILED

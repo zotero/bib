@@ -26,7 +26,7 @@ class FakeStore {
 
 describe('Zotero Translation Client', () => {
 	var fakeStore,
-		fetchRequests;
+	fetchRequests;
 
 	afterEach(fetchMock.restore);
 
@@ -39,82 +39,96 @@ describe('Zotero Translation Client', () => {
 			switch(opts.body) {
 				case 'search single':
 				case '123':
-					return {
-						body: [zoteroItemPaper],
-						headers: { 'Content-Type': 'application/json' }
-					};
+				return {
+					body: [zoteroItemPaper],
+					headers: { 'Content-Type': 'application/json' }
+				};
 				case 'search multiple':
-					return {
-						body: responseSearchMultiple,
-						status: 300,
-						headers: { 'Content-Type': 'application/json' }
-					};
+				return {
+					body: responseSearchMultiple,
+					status: 300,
+					headers: { 'Content-Type': 'application/json' }
+				};
 				case 'search more':
-					return {
-						body: responseSearchMultiple,
-						status: 300,
-						headers: {
-							'Content-Type': 'application/json',
-							'Link': '</search?start=ABC>; rel="next"'
-						}
-					};
-				default:
-					return {
-						body: [],
-						status: 200,
-						headers: { 'Content-Type': 'application/json' }
+				return {
+					body: responseSearchMultiple,
+					status: 300,
+					headers: {
+						'Content-Type': 'application/json',
+						'Link': '</search?start=ABC>; rel="next"'
 					}
+				};
+				default:
+				return {
+					body: [],
+					status: 200,
+					headers: { 'Content-Type': 'application/json' }
+				}
 			}
 		});
 
 		fetchMock.mock('/web', (url, opts) => {
 			fetchRequests.push({ url, opts });
-
-			try {
-				const body = JSON.parse(opts.body);
-				if(body.url.includes('book')) {
-					return {
-						body: [zoteroItemBook],
-						headers: { 'Content-Type': 'application/json' }
-					}
-				} else if(body.url.includes('paper')) {
-					return {
-						body: [zoteroItemPaper],
-						headers: { 'Content-Type': 'application/json' }
-					}
-				} else if(body.url.includes('multi')) {
-					return {
-						body: [zoteroItemBook, zoteroItemPaper],
-						headers: { 'Content-Type': 'application/json' }
-					}
-				} else if(body.url.includes('note')) {
-					return {
-						body: [zoteroItemPaper, zoteroItemNote],
-						headers: { 'Content-Type': 'application/json' }
-					}
-				} else if(body.url.includes('choice')) {
-					if('items' in body && Object.keys(responseWebMultiple).includes(Object.keys(body.items)[0])) {
-						return {
-							body: [zoteroItemBook],
-							headers: { 'Content-Type': 'application/json' }
+			if(opts.headers['Content-Type'] === 'application/json') {
+				try {
+					const body = JSON.parse(opts.body);
+					if(body.url.includes('choice')) {
+						if('items' in body && Object.keys(responseWebMultiple.items).includes(Object.keys(body.items)[0])) {
+							return {
+								body: [zoteroItemBook],
+								headers: { 'Content-Type': 'application/json' }
+							};
+						} else {
+							return {
+								status: 400,
+								headers: { 'Content-Type': 'text/plain' }
+							};
 						}
 					} else {
 						return {
-							status: 300,
-							body: responseWebMultiple,
-							headers: { 'Content-Type': 'application/json' }
-						}
+							status: 501,
+							headers: { 'Content-Type': 'text/plain' }
+						};
 					}
+				} catch(_) {
+					return {
+						status: 400,
+						headers: { 'Content-Type': 'text/plain' }
+					};
+				}
+			} else {
+				const url = opts.body;
+				if(url.includes('book')) {
+					return {
+						body: [zoteroItemBook],
+						headers: { 'Content-Type': 'application/json' }
+					};
+				} else if(url.includes('paper')) {
+					return {
+						body: [zoteroItemPaper],
+						headers: { 'Content-Type': 'application/json' }
+					};
+				} else if(url.includes('multi')) {
+					return {
+						body: [zoteroItemBook, zoteroItemPaper],
+						headers: { 'Content-Type': 'application/json' }
+					};
+				} else if(url.includes('note')) {
+					return {
+						body: [zoteroItemPaper, zoteroItemNote],
+						headers: { 'Content-Type': 'application/json' }
+					};
+				} else if(url.includes('choice')) {
+					return {
+						status: 300,
+						body: responseWebMultiple,
+						headers: { 'Content-Type': 'application/json' }
+					};
 				} else {
 					return {
-						status: 501,
+						status: 400,
 						headers: { 'Content-Type': 'text/plain' }
-					}
-				}
-			} catch(_) {
-				return {
-					status: 400,
-					headers: { 'Content-Type': 'text/plain' }
+					};
 				}
 			}
 		});
@@ -397,12 +411,12 @@ describe('Zotero Translation Client', () => {
 
 		assert.equal(translationResult.result, ZoteroTranslationClient.MULTIPLE_ITEMS);
 
-		const itemKey = Object.keys(translationResult.items)[0];
-		const itemValue = translationResult.items[itemKey];
+		const itemUrl = Object.keys(translationResult.items)[0];
+		const itemValue = translationResult.items[itemUrl];
 
 		await bib.translateUrlItems(
 			'http://example.com/choice',
-			{ [itemKey]: itemValue }
+			{ [itemUrl]: itemValue }
 		);
 
 		assert.equal(bib.items.length, 1);
@@ -543,11 +557,11 @@ describe('Zotero Translation Client', () => {
 
 	it('should throw an error when export fails', async () => {
 		fetchMock.mock('https://example.com/export?format=ris', {
-				status: 500,
-				headers: {
-					'Content-Type': 'plain/text'
-				},
-				body: 'Server Error'
+			status: 500,
+			headers: {
+				'Content-Type': 'plain/text'
+			},
+			body: 'Server Error'
 		});
 
 		const bib = new ZoteroTranslationClient({
@@ -592,7 +606,7 @@ describe('Zotero Translation Client', () => {
 			123,
 			{},
 			{ title: 'some title'}
-		]);
+			]);
 
 		const bib = new ZoteroTranslationClient({
 			storage: fakeStore,
