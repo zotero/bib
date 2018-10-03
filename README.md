@@ -4,6 +4,11 @@ Overview
 --------
 Zotero Translation Client is a library that can process URLs and identifiers (such as ISBN or DOI) into CSL-JSON bibliography items using [translation server](https://github.com/zotero/translation-server), optionally persisting these items in a storage object provided.
 
+Compatibility
+-------------
+
+Current version of Translation Client (2.x.x) is compatible with Translation Server v2. For compatiblity with v1, please use 1.x.x version.
+
 Getting The Library
 -------------
 
@@ -28,7 +33,8 @@ let translationClient = new ZoteroTranslationClient({
 3. Translate some urls
 
 ```javascript
-const [myPaper] = await translationClient.translateUrl('http://example.com/paper');
+const { items: [ myPaper ] } = await translationClient.translateUrl('http://example.com/paper');
+console.log(myPaper);
 ```
 
 In-memory Storage
@@ -36,13 +42,13 @@ In-memory Storage
 Normally each call to `translateUrl` returns an item and also caches it in memory. Cached items can be retrieved at any time, either as Zotero Items:
 
 ```javascript
-const [myPaper] = translationClient.itemsRaw;
+const [ myPaper ] = translationClient.itemsRaw;
 ```
 
 Or in [CSL-JSON](https://github.com/citation-style-language/schema) format:
 
 ```javascript
-const [myPaperAsCSL] = translationClient.itemsCSL;
+const [ myPaperAsCSL ] = translationClient.itemsCSL;
 ```
 
 This behaviour can be prevented using second, optional argument to `translationClient.translate`, i.e. calling `translationClient.translateUrl(url, { add: false })` will return a translated item but won't store it anywhere.
