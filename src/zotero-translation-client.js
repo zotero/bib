@@ -5,7 +5,7 @@ const dateToSql = require('./zotero-shim/date-to-sql');
 const defaults = require('./defaults');
 const itemToCSLJSON = require('./zotero-shim/item-to-csl-json');
 const parseLinkHeader = require('parse-link-header');
-const { uuid4, isLikeZoteroItem } = require('./utils');
+const { isLikeZoteroItem } = require('./utils');
 const [ COMPLETE, MULTIPLE_ITEMS, FAILED ] = [ 'COMPLETE', 'MULTIPLE_ITEMS', 'FAILED' ];
 
 class ZoteroTranslationClient {
