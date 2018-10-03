@@ -5,6 +5,7 @@
   "description": "",
   "repository": "",
   "main": "src/main.js",
+  "browserslist": "> 0.25%",
   "browserify": {
     "transform": [
       "babelify"
@@ -35,7 +36,8 @@
     "zotero-base-mappings": "0.0.2"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-regenerator": "^6.26.0",
@@ -43,19 +45,19 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-runtime": "^6.26.0",
-    "babelify": "^8.0.0",
-    "browserify": "^16.2.2",
-    "chai": "^4.1.2",
-    "citeproc": "^2.1.206",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
+    "chai": "^4.2.0",
+    "citeproc": "^2.1.210",
     "envify": "^4.1.0",
-    "fetch-mock": "^6.4.2",
+    "fetch-mock": "^7.0.6",
     "mocha": "^5.2.0",
     "npm-run-all": "^4.1.3",
-    "nyc": "^11.8.0",
+    "nyc": "^13.0.1",
     "rimraf": "^2.6.2",
-    "sinon": "^5.0.7",
-    "uglify-js": "^3.3.26",
-    "uglifyify": "^5.0.0",
+    "sinon": "^6.3.4",
+    "uglify-js": "^3.4.9",
+    "uglifyify": "^5.0.1",
     "watchify": "^3.11.0"
   }
 }
