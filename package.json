@@ -23,7 +23,7 @@
   "scripts": {
     "prepack": "npm run build",
     "postpack": "rimraf build",
-    "browserify": "mkdir -p build/ && NODE_ENV=production browserify -s ZoteroTranslationClient -d src/main.js -t [babelify] -g [ envify --NODE_ENV production ] -g uglifyify | uglifyjs --compress --mangle > build/zotero-translation-client.js",
+    "browserify": "mkdir -p build/ && NODE_ENV=production browserify -s ZoteroTranslationClient -d src/main.js -t [babelify] -g [ envify --NODE_ENV production ] -g uglifyify | terser --compress --mangle > build/zotero-translation-client.js",
     "build": "rimraf build && run-p browserify",
     "clean": "rimraf build",
     "test": "NODE_ENV=test nyc mocha",
@@ -36,8 +36,8 @@
     "zotero-base-mappings": "0.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-regenerator": "^6.26.0",
@@ -48,16 +48,16 @@
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
     "chai": "^4.2.0",
-    "citeproc": "^2.1.210",
+    "citeproc": "^2.1.235",
     "envify": "^4.1.0",
-    "fetch-mock": "^7.0.6",
-    "mocha": "^5.2.0",
-    "npm-run-all": "^4.1.3",
-    "nyc": "^13.0.1",
-    "rimraf": "^2.6.2",
-    "sinon": "^6.3.4",
-    "uglify-js": "^3.4.9",
+    "fetch-mock": "^7.3.1",
+    "mocha": "^6.0.2",
+    "npm-run-all": "^4.1.5",
+    "nyc": "^13.3.0",
+    "rimraf": "^2.6.3",
+    "sinon": "^7.3.1",
+    "terser": "^3.17.0",
     "uglifyify": "^5.0.1",
-    "watchify": "^3.11.0"
+    "watchify": "^3.11.1"
   }
 }
