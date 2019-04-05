@@ -6,7 +6,7 @@ const defaults = require('./defaults');
 const itemToCSLJSON = require('./zotero-shim/item-to-csl-json');
 const parseLinkHeader = require('parse-link-header');
 const { isLikeZoteroItem } = require('./utils');
-const [ COMPLETE, MULTIPLE_ITEMS, FAILED ] = [ 'COMPLETE', 'MULTIPLE_ITEMS', 'FAILED' ];
+const [ COMPLETE, MULTIPLE_CHOICES, FAILED ] = [ 'COMPLETE', 'MULTIPLE_CHOICES', 'FAILED' ];
 
 class ZoteroTranslationClient {
 	constructor(opts) {
@@ -185,7 +185,7 @@ class ZoteroTranslationClient {
 			} else {
 				items = data;
 			}
-			result = MULTIPLE_ITEMS;
+			result = MULTIPLE_CHOICES;
 		} else {
 			result = FAILED
 		}
@@ -194,7 +194,7 @@ class ZoteroTranslationClient {
 	}
 
 	static get COMPLETE() { return COMPLETE }
-	static get MULTIPLE_ITEMS() { return MULTIPLE_ITEMS }
+	static get MULTIPLE_CHOICES() { return MULTIPLE_CHOICES }
 	static get FAILED() { return FAILED }
 }
 

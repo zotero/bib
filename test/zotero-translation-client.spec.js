@@ -409,7 +409,7 @@ describe('Zotero Translation Client', () => {
 		const translationResult = await bib.translateUrl('http://example.com/choice');
 		assert.equal(bib.items.length, 0);
 
-		assert.equal(translationResult.result, ZoteroTranslationClient.MULTIPLE_ITEMS);
+		assert.equal(translationResult.result, ZoteroTranslationClient.MULTIPLE_CHOICES);
 
 		const itemUrl = Object.keys(translationResult.items)[0];
 		const itemValue = translationResult.items[itemUrl];
@@ -442,7 +442,7 @@ describe('Zotero Translation Client', () => {
 		assert.equal(bib.items.length, 0);
 		const searchResult = await bib.translateIdentifier('search multiple');
 
-		assert.equal(searchResult.result, ZoteroTranslationClient.MULTIPLE_ITEMS);
+		assert.equal(searchResult.result, ZoteroTranslationClient.MULTIPLE_CHOICES);
 		assert.equal(Object.keys(searchResult.items).length, 3);
 		assert.equal(bib.items.length, 0);
 
@@ -470,7 +470,7 @@ describe('Zotero Translation Client', () => {
 		assert.equal(bib.items.length, 0);
 		const searchResult = await bib.translateIdentifier('search more');
 
-		assert.equal(searchResult.result, ZoteroTranslationClient.MULTIPLE_ITEMS);
+		assert.equal(searchResult.result, ZoteroTranslationClient.MULTIPLE_CHOICES);
 		assert.deepInclude(searchResult.links.next, {
 			url: '/search?start=ABC',
 			rel: 'next'
@@ -550,7 +550,6 @@ describe('Zotero Translation Client', () => {
 		});
 
 		bib.addItem(zoteroItemBook);
-		bib.addItem(zoteroItemNote);
 		let result = await bib.exportItems('ris');
 		assert.equal(result, 'RESULT');
 	});
