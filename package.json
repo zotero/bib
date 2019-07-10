@@ -12,8 +12,8 @@
     ]
   },
   "files": [
-    "src",
-    "build"
+    "src/**/*.js",
+    "build/**/*.js"
   ],
   "config": {
     "port": "8001",
