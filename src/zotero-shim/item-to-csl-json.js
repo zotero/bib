@@ -77,7 +77,7 @@ module.exports = zoteroItem => {
 	// separate name variables
 	if (zoteroItem.type != 'attachment' && zoteroItem.type != 'note') {
 		// var author = Zotero.CreatorTypes.getName(Zotero.CreatorTypes.getPrimaryIDForType());
-		let author = defaultItemTypeCreatorTypeLookup[itemTypeID];
+		let author = defaultItemTypeCreatorTypeLookup[zoteroItem.itemType];
 		let creators = zoteroItem.creators;
 		for(let i = 0; creators && i < creators.length; i++) {
 			let creator = creators[i];

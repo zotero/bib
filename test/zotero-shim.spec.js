@@ -49,4 +49,24 @@ describe('Zotero Shim', () => {
 			author: [ { family: '', given: '' } ]
 		});
 	});
+
+	it('should port creator type when converting ZoteroItem ', () => {
+		assert.deepInclude(
+			itemToCSLJSON({
+					'key': 'ABCDABCD',
+					'version': 0,
+					'itemType': 'artwork',
+					'creators': [{
+						'firstName': 'foo',
+						'lastName': 'bar',
+						'creatorType': 'artist'
+					}],
+					'title': 'Lorem Ipsum'
+			}), {
+				type: 'graphic',
+				title: 'Lorem Ipsum',
+				author: [ { family: 'bar', given: 'foo' } ]
+			}
+		);
+	});
 });
