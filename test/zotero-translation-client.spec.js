@@ -28,7 +28,7 @@ describe('Zotero Translation Client', () => {
 	var fakeStore,
 	fetchRequests;
 
-	afterEach(fetchMock.restore);
+	afterEach(() => fetchMock.restore());
 
 	beforeEach(() => {
 		fakeStore = new FakeStore();
