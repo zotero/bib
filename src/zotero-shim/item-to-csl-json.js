@@ -1,4 +1,3 @@
-/* global CSL:false */
 'use strict';
 
 const baseMappings = require('zotero-base-mappings');
@@ -9,6 +8,8 @@ const {
 	CSL_DATE_MAPPINGS,
 	CSL_TYPE_MAPPINGS
 } = require('./csl-mappings');
+
+const parseParticles = require('./csl-parse-particles');
 
 const { getFieldIDFromTypeAndBase } = require('./type-specific-field-map');
 const fields = require('./fields');
@@ -110,7 +111,7 @@ module.exports = zoteroItem => {
 					) {
 						nameObj.family = nameObj.family.substr(1, nameObj.family.length - 2);
 					} else {
-						CSL.parseParticles(nameObj, true);
+						parseParticles(nameObj, true);
 					}
 				}
 			} else if ('name' in creator) {

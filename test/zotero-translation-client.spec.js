@@ -15,8 +15,6 @@ const cslItemBookSection = require('./fixtures/csl-item-book-section');
 const responseWebMultiple = require('./fixtures/response-web-multiple.json');
 const responseSearchMultiple = require('./fixtures/response-search-multiple.json');
 
-(global || window).CSL = require('citeproc');
-
 class FakeStore {
 	constructor() { this.clear(); }
 	getItem(key) { return key in this.storage && this.storage[key] || null }
