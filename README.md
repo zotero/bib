@@ -7,7 +7,7 @@ Zotero Translation Client is a library that can process URLs and identifiers (su
 Compatibility
 -------------
 
-Current version of Translation Client (2.x.x) is compatible with Translation Server v2. For compatiblity with v1, please use 1.x.x version.
+Current version of Translation Client (>=2.0) is compatible with Translation Server v2. For compatiblity with v1, please use 1.x.x version.
 
 Getting The Library
 -------------
