@@ -461,7 +461,7 @@ describe('Zotero Translation Client', () => {
 		assert.equal(bib.items.length, 0);
 	});
 
-	it('should parse Link headers', async () => {
+	it('should parse next from Link headers', async () => {
 		let bib = new ZoteroTranslationClient({
 			persist: false
 		});
@@ -469,10 +469,7 @@ describe('Zotero Translation Client', () => {
 		const searchResult = await bib.translateIdentifier('search more');
 
 		assert.equal(searchResult.result, ZoteroTranslationClient.MULTIPLE_CHOICES);
-		assert.deepInclude(searchResult.links.next, {
-			url: '/search?start=ABC',
-			rel: 'next'
-		});
+		assert.equal(searchResult.next, '/search?start=ABC');
 	});
 
 	it('should shouldn\'t add an untranslatable item', async () => {

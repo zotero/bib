@@ -1,10 +1,7 @@
-'use strict';
-
 require('cross-fetch/polyfill');
 const dateToSql = require('./zotero-shim/date-to-sql');
 const defaults = require('./defaults');
-const itemToCSLJSON = require('./zotero-shim/item-to-csl-json');
-const parseLinkHeader = require('parse-link-header');
+const itemToCSLJSON = require('./zotero-shim/item-to-csl-json')
 const { isLikeZoteroItem } = require('./utils');
 const [ COMPLETE, MULTIPLE_CHOICES, FAILED ] = [ 'COMPLETE', 'MULTIPLE_CHOICES', 'FAILED' ];
 
@@ -158,10 +155,15 @@ class ZoteroTranslationClient {
 
 	async translate(url, fetchOptions, { add = true } = {}) {
 		const response = await fetch(url, fetchOptions);
-		var items, result, links = {};
+		var items, result, next = null;
 
-		if(response.headers.has('Link')) {
-			links = parseLinkHeader(response.headers.get('Link'));
+		if(response.headers.has('link')) {
+			const links = response.headers.get('link');
+			const matches = links.match(/<(.*?)>;\s+rel="next"/i);
+
+			if(matches && matches.length > 1) {
+				next = matches[1];
+			}
 		}
 		if(response.ok) {
 			items = await response.json();
@@ -190,7 +192,7 @@ class ZoteroTranslationClient {
 			result = FAILED
 		}
 
-		return { result, items, response, links };
+		return { result, items, response, next };
 	}
 
 	static get COMPLETE() { return COMPLETE }
