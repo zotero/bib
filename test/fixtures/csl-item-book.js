@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
 	type: 'book',
 	title: 'Dune',
 	publisher: 'Hodder Paperbacks',

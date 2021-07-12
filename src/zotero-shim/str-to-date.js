@@ -1,8 +1,6 @@
 // adapted from https://github.com/zotero/zotero/blob/master/chrome/content/zotero/xpcom/date.js
 /* eslint-disable no-useless-escape, no-redeclare */
-'use strict';
-
-const dateToSQL = require('./date-to-sql');
+import dateToSQL from './date-to-sql.js';
 
 const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 
@@ -39,7 +37,7 @@ const _insertDateOrderPart = (dateOrder, part, partOrder) => {
 		return dateOrder + part;
 }
 
-module.exports = string => {
+export default string => {
 	var date = {
 		order: ''
 	};
@@ -250,4 +248,4 @@ module.exports = string => {
 	if(date.year || date.year === 0) date.year += '';
 
 	return date;
-}
+};

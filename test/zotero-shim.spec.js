@@ -1,13 +1,11 @@
 /* eslint-env node, mocha */
-'use strict';
-
-const assert = require('chai').assert;
-const strToDate = require('../src/zotero-shim/str-to-date');
-const itemToCSLJSON = require('../src/zotero-shim/item-to-csl-json');
-const zoteroItemBook = require('./fixtures/zotero-item-book');
-const zoteroItemPaper = require('./fixtures/zotero-item-paper');
-const cslItemBook = require('./fixtures/csl-item-book');
-const cslItemPaper = require('./fixtures/csl-item-paper');
+import { assert } from 'chai';
+import strToDate from '../src/zotero-shim/str-to-date.js';
+import itemToCSLJSON from '../src/zotero-shim/item-to-csl-json.js';
+import zoteroItemBook from './fixtures/zotero-item-book.js';
+import zoteroItemPaper from './fixtures/zotero-item-paper.js';
+import cslItemBook from './fixtures/csl-item-book.js';
+import cslItemPaper from './fixtures/csl-item-paper.js';
 
 describe('Zotero Shim', () => {
 	it('should convert date to CSL format', () => {

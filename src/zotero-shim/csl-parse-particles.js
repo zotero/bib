@@ -99,7 +99,7 @@ function parseSuffix(nameObj) {
 	}
 }
 
-module.exports = function parseParticles(nameObj) {
+export default function parseParticles(nameObj) {
 	// Extract and set non-dropping particle(s) from family name field
 	var res = splitParticles(nameObj.family);
 	var lastNameValue = res[1];

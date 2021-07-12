@@ -1,7 +1,7 @@
-const itemTypes = require('./item-types');
-const creatorTypes = require('./creator-types');
+import itemTypes from './item-types.js';
+import creatorTypes from './creator-types.js';
 
-module.exports = {
+export default {
 	[itemTypes[2]]: creatorTypes[1],
 	[itemTypes[3]]: creatorTypes[1],
 	[itemTypes[4]]: creatorTypes[1],

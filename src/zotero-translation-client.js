@@ -1,8 +1,7 @@
-require('cross-fetch/polyfill');
-const dateToSql = require('./zotero-shim/date-to-sql');
-const defaults = require('./defaults');
-const itemToCSLJSON = require('./zotero-shim/item-to-csl-json')
-const { isLikeZoteroItem } = require('./utils');
+import dateToSql from './zotero-shim/date-to-sql.js';
+import defaults from './defaults.js';
+import itemToCSLJSON from './zotero-shim/item-to-csl-json.js';
+import { isLikeZoteroItem } from './utils.js';
 const [ COMPLETE, MULTIPLE_CHOICES, FAILED ] = [ 'COMPLETE', 'MULTIPLE_CHOICES', 'FAILED' ];
 
 class ZoteroTranslationClient {
@@ -200,4 +199,4 @@ class ZoteroTranslationClient {
 	static get FAILED() { return FAILED }
 }
 
-module.exports = ZoteroTranslationClient;
+export default ZoteroTranslationClient;

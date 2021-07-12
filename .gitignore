@@ -3,6 +3,7 @@ coverage
 tmp
 lib
 .DS_Store
-build
+dist
+lib
 /demo
 .nyc_output

@@ -1,5 +1,3 @@
-'use strict';
-
 const fields = {
 	1: 'url',
 	2: 'rights',
@@ -110,4 +108,4 @@ const fields = {
 //reverse lookup
 Object.keys(fields).map(k => fields[fields[k]] = k);
 
-module.exports = fields;
+export default fields;

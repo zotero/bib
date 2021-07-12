@@ -1,19 +1,17 @@
 /* eslint-env node, mocha */
-'use strict';
+import { assert, AssertionError } from 'chai';
+import fetchMock from 'fetch-mock';
+import sinon from 'sinon';
 
-const { assert, AssertionError } = require('chai');
-const fetchMock = require('fetch-mock');
-const sinon = require('sinon');
-
-const ZoteroTranslationClient = require('../src/main.js');
-const zoteroItemBook = require('./fixtures/zotero-item-book');
-const zoteroItemBookSection = require('./fixtures/zotero-item-book-section');
-const zoteroItemPaper = require('./fixtures/zotero-item-paper');
-const zoteroItemNote = require('./fixtures/zotero-item-note');
-const cslItemBook = require('./fixtures/csl-item-book');
-const cslItemBookSection = require('./fixtures/csl-item-book-section');
-const responseWebMultiple = require('./fixtures/response-web-multiple.json');
-const responseSearchMultiple = require('./fixtures/response-search-multiple.json');
+import ZoteroTranslationClient from '../src/main.js';
+import zoteroItemBook from './fixtures/zotero-item-book.js';
+import zoteroItemBookSection from './fixtures/zotero-item-book-section.js';
+import zoteroItemPaper from './fixtures/zotero-item-paper.js';
+import zoteroItemNote from './fixtures/zotero-item-note.js';
+import cslItemBook from './fixtures/csl-item-book.js';
+import cslItemBookSection from './fixtures/csl-item-book-section.js';
+import responseWebMultiple from './fixtures/response-web-multiple.js';
+import responseSearchMultiple from './fixtures/response-search-multiple.js';
 
 class FakeStore {
 	constructor() { this.clear(); }

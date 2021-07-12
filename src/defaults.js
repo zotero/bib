@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = () => ({
+export default () => ({
 	translateURL: typeof window != 'undefined' && window.location.origin || '',
 	translatePrefix: '',
 	fetchConfig: {},

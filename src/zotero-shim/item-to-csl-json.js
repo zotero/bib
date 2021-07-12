@@ -1,21 +1,18 @@
-'use strict';
+import baseMappings from 'zotero-base-mappings';
 
-const baseMappings = require('zotero-base-mappings');
-
-const {
+import {
 	CSL_NAMES_MAPPINGS,
 	CSL_TEXT_MAPPINGS,
 	CSL_DATE_MAPPINGS,
 	CSL_TYPE_MAPPINGS
-} = require('./csl-mappings');
+} from './csl-mappings.js';
 
-const parseParticles = require('./csl-parse-particles');
-
-const { getFieldIDFromTypeAndBase } = require('./type-specific-field-map');
-const fields = require('./fields');
-const itemTypes = require('./item-types');
-const strToDate = require('./str-to-date');
-const defaultItemTypeCreatorTypeLookup = require('./default-item-type-creator-type-lookup');
+import parseParticles from './csl-parse-particles.js';
+import { getFieldIDFromTypeAndBase } from './type-specific-field-map.js';
+import fields from './fields.js';
+import itemTypes from './item-types.js';
+import strToDate from './str-to-date.js';
+import defaultItemTypeCreatorTypeLookup from './default-item-type-creator-type-lookup.js';
 
 const baseMappingsFlat = Object.keys(baseMappings).reduce((aggr, it) => {
 	Object.keys(baseMappings[it]).forEach(mapFrom => {
@@ -26,7 +23,7 @@ const baseMappingsFlat = Object.keys(baseMappings).reduce((aggr, it) => {
 	return aggr;
 }, {});
 
-module.exports = zoteroItem => {
+export default zoteroItem => {
 	var cslType = CSL_TYPE_MAPPINGS[zoteroItem.itemType];
 	if (!cslType) {
 		throw new Error('Unexpected Zotero Item type "' + zoteroItem.itemType + '"');
@@ -171,4 +168,4 @@ module.exports = zoteroItem => {
 
 	//this._cache[zoteroItem.id] = cslItem;
 	return cslItem;
-}
+};

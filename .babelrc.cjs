@@ -1,5 +1,18 @@
 const presets = [
-	["@babel/preset-env", { "debug": !!process.env.DEBUG || false, "corejs": 3, "useBuiltIns": "usage" }],
+	[
+		"@babel/preset-env", {
+			"debug": !!process.env.DEBUG || false,
+			"useBuiltIns": false,
+		}
+	]
+];
+const plugins = [
+	["@babel/plugin-transform-runtime", {
+		"absoluteRuntime": false,
+		"corejs": 3,
+		"helpers": true,
+		"regenerator": false,
+	}]
 ];
 
-module.exports = { presets };
+module.exports = { presets, plugins };

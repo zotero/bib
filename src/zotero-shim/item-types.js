@@ -1,5 +1,3 @@
-'use strict';
-
 const itemTypes = {
 	1: 'note',
 	2: 'book',
@@ -41,4 +39,4 @@ const itemTypes = {
 
 //reverse lookup
 Object.keys(itemTypes).map(k => itemTypes[itemTypes[k]] = k);
-module.exports = itemTypes;
+export default itemTypes;

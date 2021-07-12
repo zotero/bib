@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	'key': 'MTF25W26',
 	'version': 0,
 	'itemType': 'journalArticle',

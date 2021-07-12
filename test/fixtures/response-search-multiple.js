@@ -1,4 +1,4 @@
-{
+export default {
   "10.5860/choice.49-5649": {
     "itemType": "journalArticle",
     "title": "The expert cook in Enlightenment France",
@@ -14,4 +14,4 @@
     "title": "The expert cook in enlightenment France",
     "description": "Takats - 2011 - Johns Hopkins University Press"
   }
-}
+};

@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
 	type: 'article-journal',
 	title: 'Et quis in exercitation tempor',
 	'container-title': 'Example',

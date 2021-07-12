@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
 	type: 'chapter',
 	title: 'Section of Lorem Ipsum',
 	'container-title': 'Lorem Ipsum',

@@ -1,5 +1,3 @@
-'use strict';
-
 const creatorTypes = {
 	1: 'author',
 	2: 'contributor',
@@ -35,4 +33,4 @@ const creatorTypes = {
 
 //reverse lookup
 Object.keys(creatorTypes).map(k => creatorTypes[creatorTypes[k]] = k);
-module.exports = creatorTypes;
+export default creatorTypes;

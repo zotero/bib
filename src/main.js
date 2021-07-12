@@ -1,4 +1,2 @@
-'use strict';
-
-const ZoteroTranslationClient = require('./zotero-translation-client');
-module.exports = ZoteroTranslationClient;
+import ZoteroTranslationClient from './zotero-translation-client.js';
+export default ZoteroTranslationClient;
