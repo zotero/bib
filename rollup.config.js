@@ -14,7 +14,7 @@ const config = {
 	output: {
 		format: 'cjs',
 		compact: false,
-		exports: 'named',
+		exports: 'default',
 	},
 	plugins: [
 		resolve({
